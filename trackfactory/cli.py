@@ -75,7 +75,7 @@ def _extract_json_payload(text: str) -> dict | None:
     return None
 
 
-def _is_track_svg_candidate(title: str, query: str) -> bool:
+def _is_bad_svg_candidate(title: str) -> bool:
     lowered = title.lower()
     bad_terms = (
         "flag",
@@ -96,7 +96,12 @@ def _is_track_svg_candidate(title: str, query: str) -> bool:
         "oojs",
         "north america",
     )
-    if any(term in lowered for term in bad_terms):
+    return any(term in lowered for term in bad_terms)
+
+
+def _is_track_svg_candidate(title: str, query: str) -> bool:
+    lowered = title.lower()
+    if _is_bad_svg_candidate(title):
         return False
     track_terms = (
         "track",
@@ -268,11 +273,13 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
     canonical = None
     chosen = None
     svg_candidates = [c for c in candidates if c.source_type == "wikimedia_svg"]
+    cleaned_svg = [c for c in svg_candidates if not _is_bad_svg_candidate(c.title)]
+    if verbose and len(cleaned_svg) != len(svg_candidates):
+        dropped = [c.title for c in svg_candidates if c not in cleaned_svg]
+        console.print(f"[yellow]Dropped bad SVGs[/yellow]: {dropped}")
+    svg_candidates = cleaned_svg
     filtered_svg = [c for c in svg_candidates if _is_track_svg_candidate(c.title, query)]
     if filtered_svg:
-        if verbose and len(filtered_svg) != len(svg_candidates):
-            dropped = [c.title for c in svg_candidates if c not in filtered_svg]
-            console.print(f"[yellow]Filtered non-track SVGs[/yellow]: {dropped}")
         svg_candidates = filtered_svg
     if verbose:
         console.print(
@@ -363,11 +370,13 @@ def build_variants(query: str, out_slug: str | None = None, verbose: bool = Fals
         console.print("[red]No SVG candidates found[/red]")
         raise typer.Exit(code=2)
     track_id = slugify(out_slug or query)
+    cleaned_svg = [c for c in svg_candidates if not _is_bad_svg_candidate(c.title)]
+    if verbose and len(cleaned_svg) != len(svg_candidates):
+        dropped = [c.title for c in svg_candidates if c not in cleaned_svg]
+        console.print(f"[yellow]Dropped bad SVGs[/yellow]: {dropped}")
+    svg_candidates = cleaned_svg
     filtered_svg = [c for c in svg_candidates if _is_track_svg_candidate(c.title, query)]
     if filtered_svg:
-        if verbose and len(filtered_svg) != len(svg_candidates):
-            dropped = [c.title for c in svg_candidates if c not in filtered_svg]
-            console.print(f"[yellow]Filtered non-track SVGs[/yellow]: {dropped}")
         svg_candidates = filtered_svg
     if verbose:
         console.print(f"[blue]SVG candidates[/blue]: {len(svg_candidates)}")
