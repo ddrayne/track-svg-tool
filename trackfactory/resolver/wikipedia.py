@@ -114,6 +114,32 @@ def _fetch_page_images(client: httpx.Client, page_ids: list[int]) -> list[str]:
     return titles
 
 
+def _fetch_page_images_for_titles(client: httpx.Client, titles: list[str]) -> list[str]:
+    if not titles:
+        return []
+    params = {
+        "action": "query",
+        "prop": "images",
+        "titles": "|".join(titles),
+        "imlimit": 50,
+        "format": "json",
+    }
+    try:
+        resp = client.get(WIKIPEDIA_API, params=params)
+        resp.raise_for_status()
+    except httpx.HTTPStatusError:
+        return []
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    image_titles: list[str] = []
+    for page in pages.values():
+        for image in page.get("images", []):
+            title = image.get("title")
+            if title:
+                image_titles.append(title)
+    return image_titles
+
+
 def _fetch_imageinfo(client: httpx.Client, titles: list[str]) -> list[dict]:
     if not titles:
         return []
@@ -140,6 +166,8 @@ def search_wikipedia(query: str, limit: int = 5) -> list[Candidate]:
         pages = _search_pages(client, query, limit=max(5, limit))
         page_ids = [page.get("pageid") for page in pages if page.get("pageid")]
         image_titles = _fetch_page_images(client, page_ids)
+        title_variants = list(dict.fromkeys([query, query.replace("-", " "), query.replace("_", " ")]))
+        image_titles.extend(_fetch_page_images_for_titles(client, title_variants))
         svg_titles = _filter_svg_titles(image_titles)
         file_titles = _search_files(client, query, limit=max(8, limit))
         combined_titles = list(dict.fromkeys(svg_titles + file_titles))
