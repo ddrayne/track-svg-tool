@@ -89,6 +89,17 @@ app.get('/api/tracks/:trackId/configs', async (req, res) => {
   }
 })
 
+app.get('/api/tracks', async (_req, res) => {
+  try {
+    const entries = await fs.readdir(tracksRoot, { withFileTypes: true })
+    const tracks = entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)
+    tracks.sort((a, b) => a.localeCompare(b))
+    res.json({ ok: true, tracks })
+  } catch (error) {
+    res.status(500).json({ ok: false, error: String(error) })
+  }
+})
+
 app.get('/api/tracks/:trackId/:config/outputs', async (req, res) => {
   const dir = join(tracksRoot, req.params.trackId, req.params.config)
   try {

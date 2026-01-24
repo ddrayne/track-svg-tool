@@ -58,6 +58,8 @@ function App() {
   const [outputs, setOutputs] = useState<OutputFile[]>([])
   const [previewName, setPreviewName] = useState<string | null>(null)
   const [previewText, setPreviewText] = useState('')
+  const [trackOptions, setTrackOptions] = useState<string[]>([])
+  const [configOptions, setConfigOptions] = useState<string[]>([])
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   const basePath = useMemo(() => {
@@ -309,6 +311,32 @@ function App() {
     }
   }
 
+  const refreshTracks = async () => {
+    try {
+      const data = (await callApi('/tracks')) as { ok: boolean; tracks?: string[] }
+      if (data.ok && Array.isArray(data.tracks)) {
+        setTrackOptions(data.tracks)
+      }
+    } catch (err) {
+      setStatusLine(`Failed to list tracks: ${String(err)}`)
+    }
+  }
+
+  const refreshConfigs = async (track: string) => {
+    if (!track) {
+      setConfigOptions([])
+      return
+    }
+    try {
+      const data = (await callApi(`/tracks/${track}/configs`)) as { ok: boolean; configs?: string[] }
+      if (data.ok && Array.isArray(data.configs)) {
+        setConfigOptions(data.configs)
+      }
+    } catch (err) {
+      setStatusLine(`Failed to list configs: ${String(err)}`)
+    }
+  }
+
   const runBuild = async (variants: boolean) => {
     const query = intakeQuery.trim()
     if (!query) {
@@ -382,7 +410,12 @@ function App() {
 
   useEffect(() => {
     loadCanonicalFromPath()
+    refreshTracks()
   }, [])
+
+  useEffect(() => {
+    refreshConfigs(trackId)
+  }, [trackId])
 
   return (
     <div className="app">
@@ -418,12 +451,35 @@ function App() {
               <input value={trackId} onChange={(e) => setTrackId(e.target.value)} />
             </div>
             <div className="field">
+              <label>Track list</label>
+              <select value={trackId} onChange={(e) => setTrackId(e.target.value)}>
+                <option value="">Select track</option>
+                {trackOptions.map((track) => (
+                  <option key={track} value={track}>
+                    {track}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="field">
               <label>Variant</label>
               <input value={config} onChange={(e) => setConfig(e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Variant list</label>
+              <select value={config} onChange={(e) => setConfig(e.target.value)}>
+                <option value="">Select variant</option>
+                {configOptions.map((cfg) => (
+                  <option key={cfg} value={cfg}>
+                    {cfg}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="button-row">
               <button onClick={loadCanonicalFromPath}>Load canonical.json</button>
               <button onClick={loadSourceSvg}>Load SVG</button>
+              <button onClick={refreshTracks}>Refresh tracks</button>
             </div>
             <div className="button-row">
               <button onClick={loadLabelsFromPath}>Load labels.json</button>
