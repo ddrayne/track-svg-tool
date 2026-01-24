@@ -1,8 +1,8 @@
 # Track SVG Tool (TrackFactory)
 
-TrackFactory is a Python CLI that discovers, ingests, normalizes, QA checks, and renders accurate track maps as SVGs with a canonical geometry JSON for downstream use.
+TrackFactory is a Python CLI that discovers, ingests, normalizes, QA checks, and renders track maps as SVGs with a canonical geometry JSON for downstream use. It prefers Wikimedia SVGs when available and falls back to OSM geometry.
 
-Primary sources (ranked):
+Primary sources (ranked, when available):
 - Wikimedia Commons SVGs (preferred)
 - OpenStreetMap raceway geometry
 - PDFs (stubbed in v1)
@@ -17,6 +17,7 @@ Primary sources (ranked):
 
 ## Requirements
 - Python 3.13
+- Node.js 18+ (for the web viewer in `web/`)
 - Windows supported (no OS-specific paths)
 
 ## Install
@@ -55,6 +56,11 @@ Render from canonical:
 python -m trackfactory.cli render nurburgring-nordschleife
 ```
 
+Batch from a list file (one query per line):
+```powershell
+python -m trackfactory.cli batch --list top10.txt
+```
+
 Enable verbose logging:
 ```powershell
 python -m trackfactory.cli build "Nurburgring Nordschleife" --verbose
@@ -76,8 +82,9 @@ tracks/
 ```
 
 Notes on outputs:
-- For Wikimedia SVG sources, `track.svg` is the original SVG (high fidelity).
-- `centerline.svg` is a cleaned outline extracted from the source SVG when possible.
+- For Wikimedia SVG sources, `track.svg` is the original SVG (high fidelity) and `source_wiki.svg` is the raw download.
+- For non-Wikimedia sources, `track.svg` is rendered from the canonical centerline.
+- `centerline.svg` is always rendered from canonical geometry.
 - `sources.json` is written per config to avoid overwriting variants.
 
 ## LLM-assisted variants (optional)
@@ -111,6 +118,16 @@ The LLM should return JSON:
 ## Tests
 ```powershell
 pytest
+```
+
+## Web viewer
+The React app in `web/` loads tracks from `tracks/` and can render/inspect canonical geometry and SVGs.
+
+Dev:
+```powershell
+cd web
+npm install
+npm run dev
 ```
 
 ## Notes
