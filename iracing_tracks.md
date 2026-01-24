@@ -1,0 +1,146 @@
+# iRacing Tracks
+
+- Adelaide Street Circuit
+- Miami International Autodrome
+- Autodromo Hermanos Rodriguez
+- Shell V-Power Motorsports Park at The Bend
+- Portland International Raceway
+- Huset's Speedway
+- Thruxton Circuit
+- Cadwell Park
+- Circuito de Navarra (included)
+- Oswego Speedway Sachsenring
+- Autodromo Internacional do Algarve
+- Millbridge Speedway
+- Misano World Circuit Marco Simoncelli
+- Mugello Circuit
+- Circuit Zandvoort
+- Circuit de Ledenon (included)
+- Kern Raceway
+- Circuito de Jerez - Angel Nieto
+- Virginia International Raceway (included)
+- Circuit de Nevers Magny-Cours
+- Lincoln Speedway
+- Locas Oil Speedway
+- Motorsport Arena Oschersleben (included)
+- Rudskogen Motorsenter (included)
+- Fuji Speedway
+- Port Royal Speedway
+- Sandown International Motor Raceway
+- Winton Motor Raceway (included)
+- Federated Auto Parts Raceway at I-55
+- LA Coliseum
+- Bark River International Raceway
+- Knockhill Racing Circuit
+- Cedar Lake Speedway
+- Chicago Street Course
+- Circuit de Barcelona-Catalunya
+- Crandon International Raceway
+- Fairbury Speedway
+- Hickory Motor Speedway
+- Hockenheimring
+- Hunagroring
+- Lankebanen (HellRX)
+- Mount Washington Auto Road
+- iRacing Superspeedway
+- Nashville Fairgrounds Speedway
+- Nashville Superspeedway
+- North Wilkesboro Speedway
+- Red Bull Ring
+- Texas Motor Speedway
+- Weedsport Speedway
+- World Wide Technology Raceway (Gateway)
+- Lime Rock Park (included)
+- Lernerville Speedway
+- Silverstone
+- Firebird Motorsports Park
+- Wild West Motorsports Park (included)
+- Circuit des 24 Heures du Mans
+- Daytona International Speedway
+- Nurburgring Nordschleife
+- WeatherTech Raceway Laguna Seca
+- Indianapolis Motor Speedway
+- Autodromo Enzo e Dino Ferrari
+- Tsukuba Circuit (included)
+- Chilli Bowl
+- Mount Panorama Circuit
+- Charlotte Motor Speedway (included)
+- Kokomo Speedway
+- Snetterton (included)
+- Eldora Speedway
+- Knoxville Raceway
+- Circuit of the Americas
+- Detroit Grand Prix at Belle Isle
+- Bristol Motor Speedway
+- Myrtle Beach Speedway
+- Pocono Raceway
+- Southern National Motorsports Park (included)
+- Circuit de Spa-Francorchamps
+- Williams Grove Speedway
+- Talladega Superspeedway
+- The Bullring at LVMS
+- Volusia Speedway Park
+- Watkins Glen International
+- Road America
+- Autodromo Nazionale Monza
+- Nurburgring Grand-Prix-Strecke
+- Autodromo Jose Carlos Pace
+- Limaland Motorsports Park (included)
+- Michigan International Speedway
+- Circuit Gilles-Villeneuve
+- Brands Hatch Circuit
+- Silverstone Circuit - 2008
+- Lanier National Speedway - Dirt (included)
+- South Boston Speedway (included)
+- The Dirt Track at Charlotte
+- Kansas Speedway
+- Mid-Ohio Sports Car Course
+- Philip Island Circuit
+- Suzuka International Racing Course
+- Canadian Tire Motorsport Park
+- Dover Motor Speedway
+- Sebring International Raceway
+- Mobility Resort Motegi
+- Locas Oil Indianapolis Raceway Park
+- Darlington Raceway
+- Iowa Speedway
+- Auto Club Speedway
+- Kentucky Speedway
+- Oran Park Raceway (included)
+- New Smyrna Speedway
+- Donington Park
+- Thompson Speedway Motorsports Park (included)
+- Phoenix Raceway
+- Texas Motor Speedway
+- Oulton Park (included)
+- Rockingham Speedway
+- Okayama International Circuit (included)
+- Echo Park Speedway
+- The Milwaukee Mile
+- Richmond Raceway
+- Las Vegas Motor Speedway
+- Martinsville Speedway
+- New Hampshire Motor Speedway
+- Concord Speedway (included)
+- Chicagoland Speedway
+- Stafford Motor Speedway
+- Homestead Miami Speedway
+- Oxford Plains Speedway (included)
+- Lanier National Speedway (included)
+- USA International Speedway (included)
+- Irwindale Speedway
+- Sonoma Raceway
+- Michelin Raceway Road Atlanta
+- Summit Point Motorsports Park (included)
+- Barber Motorsports Park
+- Langley Speedway (included)
+- Circuit Zolder
+- Five Flags Speedway
+- USA International Speedway - Dirt (included)
+- Phoenix Raceway - 2008 (included)
+- Daytona International Speedway - Rallycross (included)
+- Centripetal Circuit (included)
+- Pocono Raceway - 2009
+- Michigan International Speedway - 2009
+- Long Beach Street Circuit
+- New Jersey Motorsports Park
