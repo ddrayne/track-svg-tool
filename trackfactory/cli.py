@@ -213,13 +213,10 @@ def _finalize_build(
     write_canonical(track_id, config, canonical.model_dump())
     if chosen.source_type == "wikimedia_svg" and source_svg:
         write_svg(track_id, config, "track.svg", source_svg)
-        outline_svg = extract_outline_svg(source_svg.encode("utf-8"))
-        if outline_svg:
-            write_svg(track_id, config, "centerline.svg", outline_svg)
-        else:
-            write_svg(track_id, config, "centerline.svg", svg_text)
+        write_svg(track_id, config, "centerline.svg", svg_text)
     else:
         write_svg(track_id, config, "track.svg", svg_text)
+        write_svg(track_id, config, "centerline.svg", svg_text)
     write_svg(track_id, config, "debug.svg", debug_svg)
     write_sources(
         track_id,

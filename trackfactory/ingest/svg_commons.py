@@ -282,6 +282,16 @@ def _score_centerline_path(path_info: dict, viewbox_area: float) -> float:
 def _select_primary_path(paths: list[dict], viewbox_area: float) -> object | None:
     if not paths:
         return None
+    stroke_candidates = []
+    for info in paths:
+        props = info["props"]
+        stroke_width = _parse_length(props.get("stroke-width"))
+        has_stroke = _parse_paint(props.get("stroke")) is not None
+        has_fill = _parse_paint(props.get("fill")) is not None
+        if has_stroke and not has_fill and stroke_width >= 2.0:
+            stroke_candidates.append(info)
+    if stroke_candidates:
+        return max(stroke_candidates, key=lambda info: _score_centerline_path(info, viewbox_area))["path"]
     closed = []
     for info in paths:
         path = info["path"]
