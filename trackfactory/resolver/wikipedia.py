@@ -1,0 +1,135 @@
+from __future__ import annotations
+
+import re
+from typing import Iterable
+
+import httpx
+
+from .model import Candidate
+
+
+WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
+HEADERS = {"User-Agent": "TrackFactory/0.1 (contact: local)"}
+
+
+def _score_title(title: str, query: str) -> float:
+    score = 0.6
+    lowered = title.lower()
+    if query.lower() in lowered:
+        score += 0.15
+    if "circuit" in lowered:
+        score += 0.08
+    if "track" in lowered or "raceway" in lowered or "speedway" in lowered:
+        score += 0.06
+    if "layout" in lowered or "map" in lowered or "oval" in lowered:
+        score += 0.05
+    if re.search(r"\.svg$", lowered):
+        score += 0.04
+    return min(score, 1.0)
+
+
+def _filter_svg_titles(titles: Iterable[str]) -> list[str]:
+    svg_titles = []
+    for title in titles:
+        if title.lower().endswith(".svg"):
+            svg_titles.append(title)
+    return svg_titles
+
+
+def _search_pages(client: httpx.Client, query: str, limit: int) -> list[dict]:
+    params = {
+        "action": "query",
+        "list": "search",
+        "srsearch": query,
+        "srlimit": limit,
+        "srnamespace": 0,
+        "format": "json",
+    }
+    try:
+        resp = client.get(WIKIPEDIA_API, params=params)
+        resp.raise_for_status()
+    except httpx.HTTPStatusError:
+        return []
+    data = resp.json()
+    return data.get("query", {}).get("search", [])
+
+
+def _fetch_page_images(client: httpx.Client, page_ids: list[int]) -> list[str]:
+    if not page_ids:
+        return []
+    params = {
+        "action": "query",
+        "prop": "images",
+        "pageids": "|".join(str(pid) for pid in page_ids),
+        "imlimit": 50,
+        "format": "json",
+    }
+    try:
+        resp = client.get(WIKIPEDIA_API, params=params)
+        resp.raise_for_status()
+    except httpx.HTTPStatusError:
+        return []
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    titles: list[str] = []
+    for page in pages.values():
+        for image in page.get("images", []):
+            title = image.get("title")
+            if title:
+                titles.append(title)
+    return titles
+
+
+def _fetch_imageinfo(client: httpx.Client, titles: list[str]) -> list[dict]:
+    if not titles:
+        return []
+    params = {
+        "action": "query",
+        "titles": "|".join(titles),
+        "prop": "imageinfo",
+        "iiprop": "url|mime|extmetadata",
+        "format": "json",
+    }
+    try:
+        resp = client.get(WIKIPEDIA_API, params=params)
+        resp.raise_for_status()
+    except httpx.HTTPStatusError:
+        return []
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    return list(pages.values())
+
+
+def search_wikipedia(query: str, limit: int = 5) -> list[Candidate]:
+    candidates: list[Candidate] = []
+    with httpx.Client(timeout=30.0, headers=HEADERS) as client:
+        pages = _search_pages(client, query, limit=max(5, limit))
+        page_ids = [page.get("pageid") for page in pages if page.get("pageid")]
+        image_titles = _fetch_page_images(client, page_ids)
+        svg_titles = _filter_svg_titles(image_titles)
+        if not svg_titles:
+            return []
+        info_pages = _fetch_imageinfo(client, svg_titles)
+
+    for item in info_pages:
+        title = item.get("title", "")
+        imageinfo = item.get("imageinfo") or [{}]
+        info = imageinfo[0]
+        url = info.get("url", "")
+        mime = info.get("mime", "")
+        if not url:
+            continue
+        if mime != "image/svg+xml" and not url.lower().endswith(".svg"):
+            continue
+        candidates.append(
+            Candidate(
+                source_type="wikimedia_svg",
+                title=title,
+                url=url,
+                score=_score_title(title, query),
+                payload={"imageinfo": info},
+            )
+        )
+
+    candidates.sort(key=lambda c: c.score, reverse=True)
+    return candidates[:limit]

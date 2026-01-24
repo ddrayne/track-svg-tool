@@ -10,7 +10,7 @@ from rich.table import Table
 from trackfactory.geom import run_qa
 from trackfactory.ingest import ingest_osm_payload, ingest_svg
 from trackfactory.render import render_debug_svg, render_wikipedia_svg
-from trackfactory.resolver import pick_best, search_commons, search_osm
+from trackfactory.resolver import search_commons, search_osm, search_wikipedia
 from trackfactory.resolver.model import Candidate, TrackCanonical
 from trackfactory.store.tracks import slugify, track_config_dir, write_canonical, write_sources, write_svg
 
@@ -26,6 +26,7 @@ def _serialize_candidate(candidate: Candidate) -> dict:
 def _combine_candidates(query: str, limit: int) -> list[Candidate]:
     candidates = []
     candidates.extend(search_commons(query, limit=limit))
+    candidates.extend(search_wikipedia(query, limit=limit))
     candidates.extend(search_osm(query, limit=limit))
     return sorted(candidates, key=lambda c: c.score, reverse=True)
 
@@ -42,6 +43,12 @@ def search(query: str, limit: int = 5):
     if not candidates:
         console.print("[red]No candidates found[/red]")
         raise typer.Exit(code=2)
+    if not console.is_terminal:
+        for idx, candidate in enumerate(candidates):
+            print(
+                f"{idx}\t{candidate.score:.2f}\t{candidate.source_type}\t{candidate.title}\t{candidate.url}"
+            )
+        return
     table = Table(title="Candidates")
     table.add_column("#", justify="right")
     table.add_column("score", justify="right")
@@ -65,21 +72,30 @@ def build(query: str, out_slug: str | None = None, config: str = "default"):
     if not candidates:
         console.print("[red]No candidates found[/red]")
         raise typer.Exit(code=2)
-    best = pick_best(candidates)
-    if best is None:
-        console.print("[red]No candidates found[/red]")
-        raise typer.Exit(code=2)
+    canonical = None
+    chosen = None
+    for candidate in candidates:
+        try:
+            if candidate.source_type == "wikimedia_svg":
+                canonical = ingest_svg(candidate.url, name=query, config=config)
+            elif candidate.source_type == "osm":
+                payload = candidate.payload.get("overpass")
+                if not payload:
+                    console.print("[red]Missing Overpass payload for OSM candidate[/red]")
+                    continue
+                canonical = ingest_osm_payload(payload, name=query, config=config)
+            else:
+                console.print(f"[red]Unsupported source type: {candidate.source_type}[/red]")
+                continue
+        except Exception as exc:
+            console.print(f"[yellow]Candidate failed ({candidate.source_type}): {exc}[/yellow]")
+            canonical = None
+        if canonical is not None:
+            chosen = candidate
+            break
 
-    if best.source_type == "wikimedia_svg":
-        canonical = ingest_svg(best.url, name=query, config=config)
-    elif best.source_type == "osm":
-        payload = best.payload.get("overpass")
-        if not payload:
-            console.print("[red]Missing Overpass payload for OSM candidate[/red]")
-            raise typer.Exit(code=3)
-        canonical = ingest_osm_payload(payload, name=query, config=config)
-    else:
-        console.print(f"[red]Unsupported source type: {best.source_type}[/red]")
+    if canonical is None or chosen is None:
+        console.print("[red]No candidates succeeded[/red]")
         raise typer.Exit(code=3)
 
     track_id = slugify(out_slug or query)
@@ -98,7 +114,7 @@ def build(query: str, out_slug: str | None = None, config: str = "default"):
         track_id,
         {
             "query": query,
-            "chosen": _serialize_candidate(best),
+            "chosen": _serialize_candidate(chosen),
             "candidates": [_serialize_candidate(c) for c in candidates],
         },
     )
