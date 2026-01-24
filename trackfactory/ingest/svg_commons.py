@@ -238,6 +238,47 @@ def _score_path_info(path_info: dict, viewbox_area: float) -> float:
     return score
 
 
+def _score_centerline_path(path_info: dict, viewbox_area: float) -> float:
+    path = path_info["path"]
+    props = path_info["props"]
+    try:
+        length = path.length()
+    except Exception:
+        return 0.0
+    if length <= 0:
+        return 0.0
+    try:
+        xmin, xmax, ymin, ymax = path.bbox()
+        area = abs((xmax - xmin) * (ymax - ymin))
+    except Exception:
+        area = 0.0
+    area_ratio = min(area / viewbox_area, 1.0) if viewbox_area else 0.0
+    stroke_width = _parse_length(props.get("stroke-width"))
+    has_stroke = _parse_paint(props.get("stroke")) is not None
+    has_fill = _parse_paint(props.get("fill")) is not None
+    score = length
+    if has_stroke:
+        score *= 1.2
+    else:
+        score *= 0.2
+    if not has_fill:
+        score *= 1.1
+    if stroke_width >= 2.0:
+        score *= 1.1
+    if stroke_width >= 6.0:
+        score *= 1.2
+    if stroke_width >= 10.0:
+        score *= 1.3
+    if viewbox_area:
+        if area_ratio < 0.005:
+            score *= 0.1
+        if area_ratio > 0.9 and has_fill:
+            score *= 0.2
+    if path_info.get("from_use"):
+        score *= 1.1
+    return score
+
+
 def _select_primary_path(paths: list[dict], viewbox_area: float) -> object | None:
     if not paths:
         return None
@@ -254,6 +295,22 @@ def _select_primary_path(paths: list[dict], viewbox_area: float) -> object | Non
             continue
     candidates = closed or paths
     return max(candidates, key=lambda info: _score_path_info(info, viewbox_area))["path"]
+
+
+def _select_centerline_path(paths: list[dict], viewbox_area: float) -> object | None:
+    if not paths:
+        return None
+    candidates = []
+    for info in paths:
+        props = info["props"]
+        has_stroke = _parse_paint(props.get("stroke")) is not None
+        has_fill = _parse_paint(props.get("fill")) is not None
+        if not has_stroke or has_fill:
+            continue
+        candidates.append(info)
+    if not candidates:
+        return None
+    return max(candidates, key=lambda info: _score_centerline_path(info, viewbox_area))["path"]
 
 
 def _is_black(value: str | None) -> bool:
@@ -465,7 +522,9 @@ def extract_outline_svg(svg_bytes: bytes) -> str | None:
     paths, viewbox_area = _extract_paths(svg_bytes)
     if not paths:
         return None
-    primary = _select_track_outline_path(paths, viewbox_area)
+    primary = _select_centerline_path(paths, viewbox_area)
+    if primary is None:
+        primary = _select_track_outline_path(paths, viewbox_area)
     if primary is None:
         primary = _select_primary_path(paths, viewbox_area)
     if primary is None:
