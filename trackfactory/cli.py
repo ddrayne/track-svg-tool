@@ -296,13 +296,14 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
         title_order = {title: idx for idx, title in enumerate(llm_result.ordered_titles)}
         svg_candidates.sort(key=lambda c: title_order.get(c.title, len(title_order)))
     if svg_candidates:
-        road_course = [c for c in svg_candidates if "road course" in c.title.lower()]
-        if road_course:
-            svg_candidates = road_course + [c for c in svg_candidates if c not in road_course]
-        else:
-            non_moto = [c for c in svg_candidates if "moto" not in c.title.lower()]
-            if non_moto:
-                svg_candidates = non_moto + [c for c in svg_candidates if c not in non_moto]
+        query_lower = query.lower()
+        if "road course" in query_lower or "oval" in query_lower:
+            road_course = [c for c in svg_candidates if "road course" in c.title.lower()]
+            if road_course:
+                svg_candidates = road_course + [c for c in svg_candidates if c not in road_course]
+        non_moto = [c for c in svg_candidates if "moto" not in c.title.lower()]
+        if non_moto:
+            svg_candidates = non_moto + [c for c in svg_candidates if c not in non_moto]
     other_candidates = [c for c in candidates if c.source_type != "wikimedia_svg"]
     ordered_candidates = svg_candidates + other_candidates
     if verbose:

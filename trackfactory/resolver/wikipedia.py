@@ -64,6 +64,30 @@ def _search_pages(client: httpx.Client, query: str, limit: int) -> list[dict]:
     return data.get("query", {}).get("search", [])
 
 
+def _search_files(client: httpx.Client, query: str, limit: int) -> list[str]:
+    params = {
+        "action": "query",
+        "list": "search",
+        "srsearch": f"{query} filetype:svg",
+        "srlimit": limit,
+        "srnamespace": 6,
+        "format": "json",
+    }
+    try:
+        resp = client.get(WIKIPEDIA_API, params=params)
+        resp.raise_for_status()
+    except httpx.HTTPStatusError:
+        return []
+    data = resp.json()
+    results = data.get("query", {}).get("search", [])
+    titles: list[str] = []
+    for item in results:
+        title = item.get("title")
+        if title and title.lower().endswith(".svg"):
+            titles.append(title)
+    return titles
+
+
 def _fetch_page_images(client: httpx.Client, page_ids: list[int]) -> list[str]:
     if not page_ids:
         return []
@@ -117,9 +141,11 @@ def search_wikipedia(query: str, limit: int = 5) -> list[Candidate]:
         page_ids = [page.get("pageid") for page in pages if page.get("pageid")]
         image_titles = _fetch_page_images(client, page_ids)
         svg_titles = _filter_svg_titles(image_titles)
-        if not svg_titles:
+        file_titles = _search_files(client, query, limit=max(8, limit))
+        combined_titles = list(dict.fromkeys(svg_titles + file_titles))
+        if not combined_titles:
             return []
-        info_pages = _fetch_imageinfo(client, svg_titles)
+        info_pages = _fetch_imageinfo(client, combined_titles)
 
     for item in info_pages:
         title = item.get("title", "")
