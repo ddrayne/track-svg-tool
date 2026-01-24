@@ -475,6 +475,11 @@ def extract_outline_svg(svg_bytes: bytes) -> str | None:
         outline = primary
     d = outline.d()
     try:
+        if outline.isclosed() and not d.strip().lower().endswith("z"):
+            d = f"{d} Z"
+    except Exception:
+        pass
+    try:
         xmin, xmax, ymin, ymax = outline.bbox()
         viewbox = f"{xmin:.3f} {ymin:.3f} {xmax - xmin:.3f} {ymax - ymin:.3f}"
     except Exception:
