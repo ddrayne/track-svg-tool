@@ -200,7 +200,8 @@ def batch(list: str = typer.Option(..., "--list")):
         try:
             build(query)
         except typer.Exit as exc:
-            if exc.code != 0:
+            code = getattr(exc, "code", getattr(exc, "exit_code", 1))
+            if code != 0:
                 failures += 1
     if failures:
         console.print(f"[red]Batch completed with {failures} failures[/red]")

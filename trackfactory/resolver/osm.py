@@ -43,18 +43,50 @@ def _build_overpass_bbox_query(bbox: tuple[float, float, float, float]) -> str:
     )
 
 
-def _search_nominatim(client: httpx.Client, query: str) -> tuple[float, float, float, float] | None:
-    params = {"q": query, "format": "json", "limit": 1}
-    resp = client.get(NOMINATIM_API, params=params)
-    resp.raise_for_status()
-    data = resp.json()
-    if not data:
+def _score_nominatim_result(result: dict, query: str) -> float:
+    score = float(result.get("importance") or 0.0)
+    display_name = str(result.get("display_name") or "").lower()
+    class_name = str(result.get("class") or "").lower()
+    type_name = str(result.get("type") or "").lower()
+    keywords = ("circuit", "raceway", "track", "speedway", "motorsport")
+    if any(keyword in display_name for keyword in keywords):
+        score += 0.3
+    if any(keyword in type_name for keyword in keywords):
+        score += 0.3
+    if class_name in {"leisure", "sport"}:
+        score += 0.15
+    query_tokens = [token.lower() for token in re.split(r"\W+", query) if token]
+    if query_tokens and all(token in display_name for token in query_tokens):
+        score += 0.2
+    return score
+
+
+def _best_nominatim_bbox(results: list[dict], query: str) -> tuple[float, float, float, float] | None:
+    if not results:
         return None
-    bbox = data[0].get("boundingbox") or []
+    best = max(results, key=lambda result: _score_nominatim_result(result, query))
+    bbox = best.get("boundingbox") or []
     if len(bbox) != 4:
         return None
     south, north, west, east = (float(value) for value in bbox)
     return (south, west, north, east)
+
+
+def _search_nominatim(client: httpx.Client, query: str) -> tuple[float, float, float, float] | None:
+    query_variants = [
+        query,
+        f"{query} circuit",
+        f"{query} raceway",
+        f"{query} track",
+        f"{query} motorsport",
+    ]
+    results: list[dict] = []
+    for variant in query_variants:
+        params = {"q": variant, "format": "json", "limit": 5}
+        resp = client.get(NOMINATIM_API, params=params)
+        resp.raise_for_status()
+        results.extend(resp.json())
+    return _best_nominatim_bbox(results, query)
 
 
 def _score_overpass_json(payload: dict, query: str) -> float:
