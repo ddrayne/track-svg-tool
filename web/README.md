@@ -5,16 +5,16 @@ review SVGs, place labels, and export SVG/labels.
 
 ## Run locally
 
-Start the API (spawns the `tf` CLI):
-
-```bash
-npm run api
-```
-
-Start the Vite dev server:
+Start both API + UI with one command:
 
 ```bash
 npm run dev
+```
+
+If you want to run the API alone (spawns the `tf` CLI):
+
+```bash
+npm run api
 ```
 
 Open the app at `http://localhost:5173`.
