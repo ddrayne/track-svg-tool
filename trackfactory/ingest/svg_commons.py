@@ -127,6 +127,7 @@ def _extract_paths(svg_bytes: bytes) -> tuple[list[dict], float]:
             class_styles.update(_parse_style_block(element.text))
     viewbox_area = _parse_viewbox_area(root)
     paths: list[dict] = []
+    path_by_id: dict[str, dict] = {}
     for element in root.iter():
         if not isinstance(element.tag, str):
             continue
@@ -135,7 +136,25 @@ def _extract_paths(svg_bytes: bytes) -> tuple[list[dict], float]:
             if not d:
                 continue
             props = _merge_style_props(element, class_styles)
-            paths.append({"path": parse_path(d), "props": props})
+            info = {"path": parse_path(d), "props": props, "from_use": False}
+            paths.append(info)
+            element_id = element.get("id")
+            if element_id:
+                path_by_id[element_id] = info
+    for element in root.iter():
+        if not isinstance(element.tag, str):
+            continue
+        if element.tag.endswith("use"):
+            href = element.get("{http://www.w3.org/1999/xlink}href") or element.get("href")
+            if not href or not href.startswith("#"):
+                continue
+            ref_id = href[1:]
+            ref = path_by_id.get(ref_id)
+            if not ref:
+                continue
+            props = ref["props"].copy()
+            props.update(_merge_style_props(element, class_styles))
+            paths.append({"path": ref["path"], "props": props, "from_use": True})
     return paths, viewbox_area
 
 
@@ -166,8 +185,12 @@ def _score_path_info(path_info: dict, viewbox_area: float) -> float:
         score *= 1.1
     if not has_stroke and has_fill:
         score *= 0.2
-    if area_ratio < 0.01:
+    if area_ratio < 0.02 and viewbox_area:
+        score *= 0.1
+    elif area_ratio < 0.01:
         score *= 0.2
+    if path_info.get("from_use"):
+        score *= 1.15
     return score
 
 
@@ -234,6 +257,10 @@ def _select_track_outline_path(paths: list[dict], viewbox_area: float) -> object
         area_ratio = area_outer / area_inner
         if area_ratio < 1.05 or area_ratio > 3.0:
             continue
+        if viewbox_area:
+            outer_ratio = area_outer / viewbox_area
+            if outer_ratio < 0.02:
+                continue
         score = area_outer
         if viewbox_area:
             score *= min(area_outer / viewbox_area, 1.0) + 0.5
@@ -241,6 +268,8 @@ def _select_track_outline_path(paths: list[dict], viewbox_area: float) -> object
             score *= 1.2
         if _is_white(_parse_paint(props.get("stroke"))):
             score *= 1.1
+        if info.get("from_use"):
+            score *= 1.15
         if score > best_score:
             best_score = score
             best = path
@@ -388,26 +417,10 @@ def _outline_from_path(path) -> SvgPath | None:
 
 def extract_outline_svg(svg_bytes: bytes) -> str | None:
     root = etree.fromstring(svg_bytes)
-    class_styles: dict[str, dict[str, str]] = {}
-    for element in root.iter():
-        if not isinstance(element.tag, str):
-            continue
-        if element.tag.endswith("style") and element.text:
-            class_styles.update(_parse_style_block(element.text))
     viewbox = None
-    paths: list[dict] = []
-    for element in root.iter():
-        if not isinstance(element.tag, str):
-            continue
-        if element.tag.endswith("path"):
-            d = element.get("d")
-            if not d:
-                continue
-            props = _merge_style_props(element, class_styles)
-            paths.append({"path": parse_path(d), "props": props})
+    paths, viewbox_area = _extract_paths(svg_bytes)
     if not paths:
         return None
-    viewbox_area = _parse_viewbox_area(root)
     primary = _select_track_outline_path(paths, viewbox_area)
     if primary is None:
         primary = _select_primary_path(paths, viewbox_area)
