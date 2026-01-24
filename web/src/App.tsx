@@ -41,6 +41,7 @@ function App() {
   const [baseUrl, setBaseUrl] = useState(() => localStorage.getItem('tf.baseUrl') ?? '/tracks')
   const [svgFileName, setSvgFileName] = useState('source_wiki.svg')
   const [apiBase, setApiBase] = useState(() => localStorage.getItem('tf.apiBase') ?? '/api')
+  const [useApiFiles, setUseApiFiles] = useState(() => localStorage.getItem('tf.useApiFiles') !== 'false')
   const [mode, setMode] = useState<'canonical' | 'svg'>('canonical')
   const [canonical, setCanonical] = useState<Canonical | null>(null)
   const [canonicalText, setCanonicalText] = useState('')
@@ -74,7 +75,13 @@ function App() {
     return trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed
   }, [apiBase])
 
-  const buildTrackUrl = (filename: string) => `${basePath}/${trackId}/${config}/${filename}`
+  const buildTrackUrl = (filename: string) => {
+    if (useApiFiles) {
+      const name = encodeURIComponent(filename)
+      return `${apiPath}/tracks/${trackId}/${config}/file?name=${name}`
+    }
+    return `${basePath}/${trackId}/${config}/${filename}`
+  }
 
   const slugify = (value: string) =>
     value
@@ -117,6 +124,9 @@ function App() {
       const resp = await fetch(buildTrackUrl('canonical.json'))
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
       const text = await resp.text()
+      if (text.trim().startsWith('<!doctype')) {
+        throw new Error('Received HTML. Check Tracks base URL or enable API file reads.')
+      }
       const parsed = JSON.parse(text) as Canonical
       setCanonical(parsed)
       setCanonicalText(JSON.stringify(parsed, null, 2))
@@ -131,7 +141,11 @@ function App() {
     try {
       const resp = await fetch(buildTrackUrl('labels.json'))
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-      const parsed = (await resp.json()) as Label[]
+      const text = await resp.text()
+      if (text.trim().startsWith('<!doctype')) {
+        throw new Error('Received HTML. Check Tracks base URL or enable API file reads.')
+      }
+      const parsed = JSON.parse(text) as Label[]
       setLabels(parsed)
       setStatusLine(`Loaded labels.json for ${trackId}/${config}`)
     } catch (err) {
@@ -204,6 +218,9 @@ function App() {
       const resp = await fetch(buildTrackUrl(filename))
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
       const text = await resp.text()
+      if (text.trim().startsWith('<!doctype')) {
+        throw new Error('Received HTML. Check Tracks base URL or enable API file reads.')
+      }
       const parsed = JSON.parse(text) as Canonical
       setCanonical(parsed)
       setCanonicalText(JSON.stringify(parsed, null, 2))
@@ -218,7 +235,11 @@ function App() {
     try {
       const resp = await fetch(buildTrackUrl(filename))
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-      const parsed = (await resp.json()) as Label[]
+      const text = await resp.text()
+      if (text.trim().startsWith('<!doctype')) {
+        throw new Error('Received HTML. Check Tracks base URL or enable API file reads.')
+      }
+      const parsed = JSON.parse(text) as Label[]
       setLabels(parsed)
       setStatusLine(`Loaded ${filename}`)
     } catch (err) {
@@ -409,6 +430,10 @@ function App() {
   }, [apiBase])
 
   useEffect(() => {
+    localStorage.setItem('tf.useApiFiles', String(useApiFiles))
+  }, [useApiFiles])
+
+  useEffect(() => {
     loadCanonicalFromPath()
     refreshTracks()
   }, [])
@@ -446,6 +471,10 @@ function App() {
                 placeholder="/tracks or /@fs/C:/path/to/tracks"
               />
             </div>
+            <label className="toggle">
+              <input type="checkbox" checked={useApiFiles} onChange={(e) => setUseApiFiles(e.target.checked)} />
+              <span>Read files via API</span>
+            </label>
             <div className="field">
               <label>Track</label>
               <input value={trackId} onChange={(e) => setTrackId(e.target.value)} />

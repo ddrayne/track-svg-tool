@@ -122,6 +122,29 @@ app.get('/api/tracks/:trackId/:config/outputs', async (req, res) => {
   }
 })
 
+app.get('/api/tracks/:trackId/:config/file', async (req, res) => {
+  const name = String(req.query.name || '')
+  if (!name || name.includes('/') || name.includes('\\')) {
+    res.status(400).json({ ok: false, error: 'invalid filename' })
+    return
+  }
+  const filePath = join(tracksRoot, req.params.trackId, req.params.config, name)
+  try {
+    const text = await fs.readFile(filePath, 'utf-8')
+    if (name.endsWith('.svg')) {
+      res.type('image/svg+xml').send(text)
+      return
+    }
+    if (name.endsWith('.json')) {
+      res.type('application/json').send(text)
+      return
+    }
+    res.type('text/plain').send(text)
+  } catch (error) {
+    res.status(404).json({ ok: false, error: String(error) })
+  }
+})
+
 app.listen(port, () => {
   console.log(`TrackFactory API listening on http://localhost:${port}`)
   console.log(`Tracks root: ${tracksRoot}`)
