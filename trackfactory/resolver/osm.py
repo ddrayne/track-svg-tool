@@ -90,10 +90,10 @@ def _search_nominatim(client: httpx.Client, query: str) -> tuple[float, float, f
 
 
 def _score_overpass_json(payload: dict, query: str) -> float:
-    score = 0.6
+    score = 0.4
     elements = payload.get("elements", [])
     if not elements:
-        return 0.1
+        return 0.05
     closed = 0
     name_match = 0
     for el in elements:
@@ -114,7 +114,8 @@ def _score_overpass_json(payload: dict, query: str) -> float:
 
 def search_osm(query: str, limit: int = 5) -> list[Candidate]:
     candidates: list[Candidate] = []
-    with httpx.Client(timeout=60.0) as client:
+    headers = {"User-Agent": "TrackFactory/0.1 (https://www.trackfactor.com; mailto:info@trackfactory.com)"}
+    with httpx.Client(timeout=60.0, headers=headers) as client:
         bbox = None
         try:
             bbox = _search_nominatim(client, query)

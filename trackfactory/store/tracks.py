@@ -37,8 +37,10 @@ def write_svg(track_id: str, config: str, name: str, svg_text: str) -> Path:
     return out_path
 
 
-def write_sources(track_id: str, sources: dict) -> Path:
+def write_sources(track_id: str, sources: dict, config: str | None = None) -> Path:
     out_dir = tracks_root() / track_id
+    if config:
+        out_dir = out_dir / config
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "sources.json"
     out_path.write_text(json.dumps(sources, indent=2), encoding="utf-8")

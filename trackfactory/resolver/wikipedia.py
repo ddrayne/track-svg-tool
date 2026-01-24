@@ -9,14 +9,22 @@ from .model import Candidate
 
 
 WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
-HEADERS = {"User-Agent": "TrackFactory/0.1 (contact: local)"}
+HEADERS = {"User-Agent": "TrackFactory/0.1 (https://www.trackfactor.com; mailto:info@trackfactory.com)"}
 
 
 def _score_title(title: str, query: str) -> float:
-    score = 0.6
+    score = 0.7
     lowered = title.lower()
-    if query.lower() in lowered:
+    query_lower = query.lower()
+    if query_lower in lowered:
+        score += 0.2
+    tokens = [token for token in re.split(r"\W+", query_lower) if token]
+    if tokens and all(token in lowered for token in tokens):
         score += 0.15
+    if "road course" in lowered or "road_course" in lowered:
+        score += 0.2
+    if any(term in lowered for term in ("moto", "motorcycle", "kart", "drag", "flat track")):
+        score -= 0.25
     if "circuit" in lowered:
         score += 0.08
     if "track" in lowered or "raceway" in lowered or "speedway" in lowered:
@@ -25,7 +33,9 @@ def _score_title(title: str, query: str) -> float:
         score += 0.05
     if re.search(r"\.svg$", lowered):
         score += 0.04
-    return min(score, 1.0)
+    if any(bad in lowered for bad in ("logo", "flag", "seal", "shield")):
+        score -= 0.2
+    return max(min(score, 1.0), 0.0)
 
 
 def _filter_svg_titles(titles: Iterable[str]) -> list[str]:

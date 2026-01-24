@@ -9,20 +9,33 @@ from .model import Candidate
 
 
 COMMONS_API = "https://commons.wikimedia.org/w/api.php"
+USER_AGENT = "TrackFactory/0.1 (https://www.trackfactor.com; mailto:info@trackfactory.com)"
 
 
-def _score_title(title: str) -> float:
+def _score_title(title: str, query: str) -> float:
     score = 0.8
     lowered = title.lower()
+    query_lower = query.lower()
+    tokens = [token for token in re.split(r"\W+", query_lower) if token]
+    if tokens and all(token in lowered for token in tokens):
+        score += 0.15
+    elif tokens and any(token in lowered for token in tokens):
+        score += 0.05
+    if "road course" in lowered or "road_course" in lowered:
+        score += 0.15
     if "circuit" in lowered:
         score += 0.08
     if "track" in lowered:
         score += 0.05
     if "layout" in lowered or "map" in lowered:
         score += 0.04
+    if any(term in lowered for term in ("moto", "motorcycle", "kart", "drag", "flat track")):
+        score -= 0.25
+    if any(term in lowered for term in ("map of", "county", "city", "flag", "logo", "seal", "shield")):
+        score -= 0.2
     if re.search(r"\.svg$", lowered):
         score += 0.03
-    return min(score, 1.0)
+    return max(min(score, 1.0), 0.0)
 
 
 def _filter_svg_results(items: Iterable[dict]) -> list[dict]:
@@ -48,7 +61,7 @@ def _build_queries(query: str) -> list[str]:
     queries = [query]
     if base and base != query:
         queries.append(base)
-    keywords = ["track map", "circuit", "layout", "map", "raceway", "speedway", "oval"]
+    keywords = ["track map", "circuit", "layout", "map", "raceway", "speedway", "oval", "road course"]
     for keyword in keywords:
         queries.append(f"{base} {keyword}")
     return list(dict.fromkeys(q for q in queries if q))
@@ -62,7 +75,7 @@ def search_commons(query: str, limit: int = 5) -> list[Candidate]:
         "srlimit": max(10, limit * 2),
         "format": "json",
     }
-    headers = {"User-Agent": "TrackFactory/0.1 (contact: local)"}
+    headers = {"User-Agent": USER_AGENT}
     titles: list[str] = []
     with httpx.Client(timeout=30.0, headers=headers) as client:
         for q in _build_queries(query):
@@ -109,7 +122,7 @@ def search_commons(query: str, limit: int = 5) -> list[Candidate]:
             source_type="wikimedia_svg",
             title=title,
             url=url,
-            score=_score_title(title),
+            score=_score_title(title, query),
             payload={"imageinfo": info},
         )
         existing = candidates.get(title)
