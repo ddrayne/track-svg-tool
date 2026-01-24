@@ -11,7 +11,13 @@ from rich.console import Console
 from rich.table import Table
 
 from trackfactory.geom import run_qa
-from trackfactory.ingest import extract_outline_svg, ingest_osm_payload, ingest_svg
+from trackfactory.ingest import (
+    extract_outline_svg,
+    ingest_osm_payload,
+    ingest_svg,
+    svg_mentions_query,
+    text_mentions_query,
+)
 from trackfactory.render import render_debug_svg, render_wikipedia_svg
 from trackfactory.resolver import search_commons, search_osm, search_wikipedia
 from trackfactory.resolver.model import Candidate, TrackCanonical
@@ -302,6 +308,10 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
         try:
             if candidate.source_type == "wikimedia_svg":
                 canonical, source_svg = ingest_svg(candidate.url, name=query, config=config)
+                if not svg_mentions_query(source_svg, query) and not text_mentions_query(
+                    candidate.title or "", query
+                ):
+                    raise ValueError("SVG content does not mention track name")
             elif candidate.source_type == "osm":
                 payload = candidate.payload.get("overpass")
                 if not payload:
@@ -390,6 +400,10 @@ def build_variants(query: str, out_slug: str | None = None, verbose: bool = Fals
         source_svg = None
         try:
             canonical, source_svg = ingest_svg(candidate.url, name=query, config=config)
+            if not svg_mentions_query(source_svg, query) and not text_mentions_query(
+                candidate.title or "", query
+            ):
+                raise ValueError("SVG content does not mention track name")
         except Exception as exc:
             console.print(f"[yellow]Variant failed ({candidate.title}): {exc}[/yellow]")
             failures += 1

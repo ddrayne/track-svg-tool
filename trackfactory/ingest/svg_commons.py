@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import re
 from pathlib import Path
+import unicodedata
 
 import httpx
 from lxml import etree
@@ -115,6 +116,49 @@ def _read_viewbox(root: etree._Element) -> str | None:
         if w and h:
             return f"0 0 {w} {h}"
     return None
+
+
+def text_mentions_query(text: str, query: str) -> bool:
+    if not text or not query:
+        return False
+    normalized = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii").lower()
+    normalized_query = (
+        unicodedata.normalize("NFKD", query).encode("ascii", "ignore").decode("ascii").lower()
+    )
+    tokens = [t for t in re.split(r"[^a-z0-9]+", normalized_query) if t]
+    stopwords = {
+        "road",
+        "international",
+        "raceway",
+        "speedway",
+        "circuit",
+        "track",
+        "course",
+        "park",
+        "motor",
+        "motorsports",
+        "race",
+        "oval",
+        "grand",
+        "prix",
+        "gp",
+    }
+    key_tokens = [t for t in tokens if len(t) >= 4 and t not in stopwords]
+    if not key_tokens:
+        key_tokens = [t for t in tokens if len(t) >= 4]
+    if not key_tokens:
+        return False
+    return any(token in normalized for token in key_tokens)
+
+
+def svg_mentions_query(svg_bytes: bytes, query: str) -> bool:
+    if not svg_bytes or not query:
+        return False
+    try:
+        text = svg_bytes.decode("utf-8", errors="ignore")
+    except Exception:
+        return False
+    return text_mentions_query(text, query)
 
 
 def _extract_paths(svg_bytes: bytes) -> tuple[list[dict], float]:
