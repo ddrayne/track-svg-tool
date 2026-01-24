@@ -250,8 +250,11 @@ def _score_centerline_path(path_info: dict, viewbox_area: float) -> float:
     try:
         xmin, xmax, ymin, ymax = path.bbox()
         area = abs((xmax - xmin) * (ymax - ymin))
+        bbox_perimeter = 2.0 * ((xmax - xmin) + (ymax - ymin))
     except Exception:
         area = 0.0
+        bbox_perimeter = 0.0
+    segment_count = len(path)
     area_ratio = min(area / viewbox_area, 1.0) if viewbox_area else 0.0
     stroke_width = _parse_length(props.get("stroke-width"))
     has_stroke = _parse_paint(props.get("stroke")) is not None
@@ -274,6 +277,12 @@ def _score_centerline_path(path_info: dict, viewbox_area: float) -> float:
             score *= 0.1
         if area_ratio > 0.9 and has_fill:
             score *= 0.2
+    if segment_count <= 6:
+        score *= 0.1
+    elif segment_count <= 12:
+        score *= 0.4
+    if bbox_perimeter > 0 and abs(length - bbox_perimeter) / bbox_perimeter < 0.06:
+        score *= 0.05
     if path_info.get("from_use"):
         score *= 1.1
     return score
