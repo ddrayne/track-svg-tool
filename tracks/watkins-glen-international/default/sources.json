@@ -1,0 +1,2350 @@
+{
+  "query": "Watkins Glen International",
+  "chosen": {
+    "source_type": "wikimedia_svg",
+    "title": "File:Watkins Glen International Long Circuit 2024.svg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Watkins_Glen_International_Long_Circuit_2024.svg",
+    "score": 1.0,
+    "payload": {
+      "imageinfo": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Watkins_Glen_International_Long_Circuit_2024.svg",
+        "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watkins_Glen_International_Long_Circuit_2024.svg",
+        "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=154394995",
+        "extmetadata": {
+          "DateTime": {
+            "value": "2024-10-27 03:16:29",
+            "source": "mediawiki-metadata",
+            "hidden": ""
+          },
+          "ObjectName": {
+            "value": "Watkins Glen International Long Circuit 2024",
+            "source": "mediawiki-metadata"
+          },
+          "CommonsMetadataExtension": {
+            "value": 1.2,
+            "source": "extension",
+            "hidden": ""
+          },
+          "Categories": {
+            "value": "Self-published work|Watkins Glen International Raceway circuit maps",
+            "source": "commons-categories",
+            "hidden": ""
+          },
+          "Assessments": {
+            "value": "",
+            "source": "commons-categories",
+            "hidden": ""
+          },
+          "ImageDescription": {
+            "value": "Track map of the Watkins Glen International long circuit as of 2024.",
+            "source": "commons-desc-page"
+          },
+          "DateTimeOriginal": {
+            "value": "2024-10-26",
+            "source": "commons-desc-page"
+          },
+          "Credit": {
+            "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+            "source": "commons-desc-page"
+          },
+          "Artist": {
+            "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Stl66dmk&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Stl66dmk (page does not exist)\">Stl66dmk</a>",
+            "source": "commons-desc-page"
+          },
+          "LicenseShortName": {
+            "value": "CC BY-SA 4.0",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "UsageTerms": {
+            "value": "Creative Commons Attribution-Share Alike 4.0",
+            "source": "commons-desc-page"
+          },
+          "AttributionRequired": {
+            "value": "true",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "LicenseUrl": {
+            "value": "https://creativecommons.org/licenses/by-sa/4.0",
+            "source": "commons-desc-page"
+          },
+          "Copyrighted": {
+            "value": "True",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "Restrictions": {
+            "value": "",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "License": {
+            "value": "cc-by-sa-4.0",
+            "source": "commons-templates",
+            "hidden": ""
+          }
+        },
+        "mime": "image/svg+xml"
+      }
+    }
+  },
+  "candidates": [
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Watkins Glen International Long Circuit 2024.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Watkins_Glen_International_Long_Circuit_2024.svg",
+      "score": 1.0,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Watkins_Glen_International_Long_Circuit_2024.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watkins_Glen_International_Long_Circuit_2024.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=154394995",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2024-10-27 03:16:29",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Watkins Glen International Long Circuit 2024",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Self-published work|Watkins Glen International Raceway circuit maps",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Track map of the Watkins Glen International long circuit as of 2024.",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "2024-10-26",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Stl66dmk&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Stl66dmk (page does not exist)\">Stl66dmk</a>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "CC BY-SA 4.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Creative Commons Attribution-Share Alike 4.0",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "true",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/4.0",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-4.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Watkins Glen International Short Circuit 2024.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Watkins_Glen_International_Short_Circuit_2024.svg",
+      "score": 1.0,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Watkins_Glen_International_Short_Circuit_2024.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watkins_Glen_International_Short_Circuit_2024.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=154395058",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2024-10-27 03:18:01",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Watkins Glen International Short Circuit 2024",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Self-published work|Watkins Glen International Raceway circuit maps",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Track map of the Watkins Glen International short circuit as of 2024.",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "2024-10-26",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Stl66dmk&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Stl66dmk (page does not exist)\">Stl66dmk</a>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "CC BY-SA 4.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Creative Commons Attribution-Share Alike 4.0",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "true",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/4.0",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-4.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Watkins Glen International Track Map-1960-1970.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/82/Watkins_Glen_International_Track_Map-1960-1970.svg",
+      "score": 1.0,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/8/82/Watkins_Glen_International_Track_Map-1960-1970.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watkins_Glen_International_Track_Map-1960-1970.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=19338107",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2012-05-05 19:48:19",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Watkins Glen International Track Map-1960-1970",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Self-published work|Files with coordinates missing SDC location of creation|Watkins Glen International Raceway circuit maps",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "GPSLatitude": {
+              "value": "42.336333",
+              "source": "commons-desc-page"
+            },
+            "GPSLongitude": {
+              "value": "-76.924167",
+              "source": "commons-desc-page"
+            },
+            "GPSMapDatum": {
+              "value": "WGS-84",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Circuito watkins, versione modificata per rappresentare il circuito dal 1961 al 1970 (si veda <a rel=\"nofollow\" class=\"external free\" href=\"http://www.statsf1.com/it/circuit-watkins-glen.aspx\">http://www.statsf1.com/it/circuit-watkins-glen.aspx</a>)",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "2012-05-05",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>, basis from <a href=\"//commons.wikimedia.org/wiki/File:Watkins_Glen_International_Track_Map.svg\" title=\"File:Watkins Glen International Track Map.svg\">Watkins Glen International Track Map.svg</a>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<a href=\"//commons.wikimedia.org/wiki/User:Xander89\" title=\"User:Xander89\">Xander89</a>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "CC BY-SA 3.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Creative Commons Attribution-Share Alike 3.0",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "true",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/3.0",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-3.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Watkins Glen International Track Map-1970-1980.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/07/Watkins_Glen_International_Track_Map-1970-1980.svg",
+      "score": 1.0,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/0/07/Watkins_Glen_International_Track_Map-1970-1980.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watkins_Glen_International_Track_Map-1970-1980.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=19338108",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2012-05-05 19:46:22",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Watkins Glen International Track Map-1970-1980",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Self-published work|Files with coordinates missing SDC location of creation|Watkins Glen International Raceway circuit maps",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "GPSLatitude": {
+              "value": "42.336333",
+              "source": "commons-desc-page"
+            },
+            "GPSLongitude": {
+              "value": "-76.924167",
+              "source": "commons-desc-page"
+            },
+            "GPSMapDatum": {
+              "value": "WGS-84",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Circuito watkins, versione modificata per rappresentare il circuito dal 1971 al 1980 (si veda <a rel=\"nofollow\" class=\"external free\" href=\"http://www.statsf1.com/it/circuit-watkins-glen.aspx\">http://www.statsf1.com/it/circuit-watkins-glen.aspx</a>)",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "2012-05-05",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>, basis from <a href=\"//commons.wikimedia.org/wiki/File:Watkins_Glen_International_Track_Map.svg\" title=\"File:Watkins Glen International Track Map.svg\">Watkins Glen International Track Map.svg</a>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<a href=\"//commons.wikimedia.org/wiki/User:Xander89\" title=\"User:Xander89\">Xander89</a>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "CC BY-SA 3.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Creative Commons Attribution-Share Alike 3.0",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "true",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/3.0",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-3.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Watkins Glen International logo.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Watkins_Glen_International_logo.svg",
+      "score": 0.8899999999999999,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Watkins_Glen_International_logo.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watkins_Glen_International_logo.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=106748939",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2025-01-26 11:39:36",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Watkins Glen International logo",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Watkins Glen International|With trademark|Logos of New York (state)|PD textlogo|SVG text logos|Valid SVG created with Inkscape:Text logos|Motorsport logos by VulcanSphere",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Watkins Glen International logo",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<a rel=\"nofollow\" class=\"external free\" href=\"http://www.theglen.com/\">http://www.theglen.com/</a>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "Watkins Glen International",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "Public domain",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Public domain",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "false",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Copyrighted": {
+              "value": "False",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "trademarked",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "pd",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "osm",
+      "title": "OSM bbox match for 'Watkins Glen International'",
+      "url": "https://overpass-api.de/api/interpreter",
+      "score": 0.53,
+      "payload": {
+        "overpass": {
+          "version": 0.6,
+          "generator": "Overpass API 0.7.62.10 2d4cfc48",
+          "osm3s": {
+            "timestamp_osm_base": "2026-01-24T20:13:30Z",
+            "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+          },
+          "elements": [
+            {
+              "type": "way",
+              "id": 20163576,
+              "nodes": [
+                2967820379,
+                11509965246,
+                213219015,
+                213219012,
+                213219010,
+                638991442
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 20164027,
+              "nodes": [
+                638991424,
+                2967820356,
+                638991431,
+                213223417,
+                11509965260,
+                6340979907,
+                638875810,
+                11509965259,
+                11509965258,
+                2967820376,
+                11509965257,
+                11509965256,
+                11509965255,
+                213223420,
+                11509965254,
+                11509965253,
+                2967820378,
+                213223422,
+                11509965252,
+                11509965251,
+                11509965250,
+                11509965249,
+                11509965248,
+                11509965247,
+                213219015
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Pit Lane",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 50262689,
+              "nodes": [
+                213218903,
+                213218905,
+                213218906
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 50289311,
+              "nodes": [
+                2967820339,
+                638991419,
+                2967820342,
+                638991422,
+                638991424
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Pit Lane",
+                "oneway": "yes",
+                "sport": "motor"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208056,
+              "nodes": [
+                638875818,
+                638991444,
+                213218978,
+                6340979915,
+                638991445,
+                6340979916,
+                213218975,
+                213218972,
+                6340979917,
+                213218969,
+                638991446,
+                213218966,
+                638991447,
+                213218963,
+                213218903
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Outer Loop",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208060,
+              "nodes": [
+                213218903,
+                6340979918,
+                6340979919,
+                213218959,
+                213218958,
+                638781625
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Short Course",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208062,
+              "nodes": [
+                2967820371,
+                2967820370,
+                6340979911,
+                11510080859,
+                213218997,
+                11510080860,
+                2967820369,
+                213218994,
+                11510080861,
+                2967820366,
+                11510080862,
+                213218991,
+                11510080863,
+                11510080864,
+                2967820363
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Esses",
+                "oneway": "yes",
+                "ref": "3",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208063,
+              "nodes": [
+                638991442,
+                11509965245,
+                6340979910,
+                11510080853,
+                638875820,
+                11510080854,
+                2967820375,
+                11510080855,
+                213219007,
+                11510080856,
+                2967820373,
+                11510080857,
+                213219004,
+                2967820372,
+                11510080858,
+                213219001,
+                2967820371
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Esses",
+                "oneway": "yes",
+                "ref": "2",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208064,
+              "nodes": [
+                2967820363,
+                11510080865,
+                638991443,
+                6340979912,
+                2967820362,
+                11510080866,
+                213218988,
+                2967820352,
+                11510080868,
+                213218985,
+                11510080867,
+                2967820343,
+                11510080869,
+                11510080870,
+                6340979913,
+                11510080871,
+                11510080877,
+                2967820335
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Esses",
+                "oneway": "yes",
+                "ref": "4",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208065,
+              "nodes": [
+                213219037,
+                11510098831,
+                6340979901,
+                213219035,
+                11510098832,
+                6340979902,
+                638991437,
+                6340979903,
+                11510098829,
+                2967812532,
+                11510098830,
+                213219033
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Fast Lefthander",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208066,
+              "nodes": [
+                213218945,
+                2967812529,
+                2967812530,
+                638991386,
+                6340979926,
+                213218947,
+                638991388,
+                6340979927,
+                213218949,
+                2967812531
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Heel",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208067,
+              "nodes": [
+                213219023,
+                213219021,
+                11510142180,
+                6340979908,
+                11510142181,
+                638991439,
+                6340979909,
+                213219018,
+                11510142182,
+                638991440,
+                2967820379
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Ninety",
+                "oneway": "yes",
+                "ref": "1",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208068,
+              "nodes": [
+                213218951,
+                213218954,
+                6340979928,
+                638991391,
+                6340979900,
+                638991392,
+                638991397,
+                6340979899,
+                638781625
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Off Camber",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208069,
+              "nodes": [
+                213218926,
+                6340979920,
+                638991383,
+                2967812525,
+                213218928,
+                6340979921,
+                213218932,
+                6340979922,
+                213218935,
+                6340979923,
+                6340979924,
+                213218939,
+                6340979925,
+                213218941,
+                2967812526
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Toe",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208070,
+              "nodes": [
+                638781625,
+                213219037
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208071,
+              "nodes": [
+                2967812531,
+                213218951
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208072,
+              "nodes": [
+                213218924,
+                213218926
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208073,
+              "nodes": [
+                2967812526,
+                213218945
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208074,
+              "nodes": [
+                2967820335,
+                638875815
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 293208075,
+              "nodes": [
+                213219033,
+                213219032,
+                6340979906,
+                11510310579,
+                213219030,
+                638991438,
+                6340979905,
+                213219028,
+                6340979904,
+                638991418,
+                213219026,
+                2967820339,
+                213219023
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 343460633,
+              "nodes": [
+                638875815,
+                638875818
+              ],
+              "tags": {
+                "disused": "yes",
+                "highway": "raceway",
+                "name": "Watkins Glen International",
+                "oneway": "yes",
+                "sport": "motor",
+                "tiger:cfcc": "A41",
+                "tiger:county": "Schuyler, NY"
+              }
+            },
+            {
+              "type": "way",
+              "id": 409834185,
+              "nodes": [
+                213218906,
+                4117038479,
+                4117038480,
+                4117038481,
+                4117038482,
+                4117038483,
+                4117038484,
+                4117038485,
+                4117038486,
+                4117038487,
+                4117038488,
+                4117039089,
+                4117039090,
+                4117039091,
+                4117039092,
+                4117039093,
+                4117039094,
+                4117039095,
+                213218924
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "The Chute",
+                "oneway": "yes",
+                "sport": "motor"
+              }
+            },
+            {
+              "type": "way",
+              "id": 428026652,
+              "nodes": [
+                638875815,
+                4271812298,
+                6340979914,
+                11510215172,
+                11510215171,
+                4271812299,
+                4271812300,
+                4271812301,
+                4271812302,
+                4271812303,
+                4271812304,
+                11510215170,
+                4271812305,
+                11510215169,
+                4271812306,
+                4271812307,
+                11510173368,
+                638875818
+              ],
+              "tags": {
+                "highway": "raceway",
+                "name": "Inner Loop",
+                "oneway": "yes",
+                "sport": "motor"
+              }
+            },
+            {
+              "type": "node",
+              "id": 213218903,
+              "lat": 42.3307346,
+              "lon": -76.9230588
+            },
+            {
+              "type": "node",
+              "id": 213218905,
+              "lat": 42.3312808,
+              "lon": -76.9236661
+            },
+            {
+              "type": "node",
+              "id": 213218906,
+              "lat": 42.332211,
+              "lon": -76.924639
+            },
+            {
+              "type": "node",
+              "id": 213218924,
+              "lat": 42.3316377,
+              "lon": -76.9263991
+            },
+            {
+              "type": "node",
+              "id": 213218926,
+              "lat": 42.3293364,
+              "lon": -76.9262244
+            },
+            {
+              "type": "node",
+              "id": 213218928,
+              "lat": 42.328679,
+              "lon": -76.9263698
+            },
+            {
+              "type": "node",
+              "id": 213218932,
+              "lat": 42.3285134,
+              "lon": -76.9267018
+            },
+            {
+              "type": "node",
+              "id": 213218935,
+              "lat": 42.3284958,
+              "lon": -76.927191
+            },
+            {
+              "type": "node",
+              "id": 213218939,
+              "lat": 42.3287494,
+              "lon": -76.9276407
+            },
+            {
+              "type": "node",
+              "id": 213218941,
+              "lat": 42.3290271,
+              "lon": -76.9277909
+            },
+            {
+              "type": "node",
+              "id": 213218945,
+              "lat": 42.3338013,
+              "lon": -76.9283702
+            },
+            {
+              "type": "node",
+              "id": 213218947,
+              "lat": 42.3343674,
+              "lon": -76.9279369
+            },
+            {
+              "type": "node",
+              "id": 213218949,
+              "lat": 42.3343252,
+              "lon": -76.9273402
+            },
+            {
+              "type": "node",
+              "id": 213218951,
+              "lat": 42.3335367,
+              "lon": -76.9251866
+            },
+            {
+              "type": "node",
+              "id": 213218954,
+              "lat": 42.3334841,
+              "lon": -76.9250278
+            },
+            {
+              "type": "node",
+              "id": 213218958,
+              "lat": 42.3335559,
+              "lon": -76.9239392
+            },
+            {
+              "type": "node",
+              "id": 213218959,
+              "lat": 42.3316727,
+              "lon": -76.9233911
+            },
+            {
+              "type": "node",
+              "id": 213218963,
+              "lat": 42.330545,
+              "lon": -76.9228353
+            },
+            {
+              "type": "node",
+              "id": 213218966,
+              "lat": 42.3302799,
+              "lon": -76.9222982
+            },
+            {
+              "type": "node",
+              "id": 213218969,
+              "lat": 42.3302001,
+              "lon": -76.9217307
+            },
+            {
+              "type": "node",
+              "id": 213218972,
+              "lat": 42.3302894,
+              "lon": -76.921177
+            },
+            {
+              "type": "node",
+              "id": 213218975,
+              "lat": 42.3304313,
+              "lon": -76.9208796
+            },
+            {
+              "type": "node",
+              "id": 213218978,
+              "lat": 42.3310129,
+              "lon": -76.9203577
+            },
+            {
+              "type": "node",
+              "id": 213218985,
+              "lat": 42.3395055,
+              "lon": -76.921005
+            },
+            {
+              "type": "node",
+              "id": 213218988,
+              "lat": 42.3398281,
+              "lon": -76.9212359
+            },
+            {
+              "type": "node",
+              "id": 213218991,
+              "lat": 42.3410213,
+              "lon": -76.9228218
+            },
+            {
+              "type": "node",
+              "id": 213218994,
+              "lat": 42.3414776,
+              "lon": -76.9232568
+            },
+            {
+              "type": "node",
+              "id": 213218997,
+              "lat": 42.3417835,
+              "lon": -76.9234209
+            },
+            {
+              "type": "node",
+              "id": 213219001,
+              "lat": 42.3425904,
+              "lon": -76.9235806
+            },
+            {
+              "type": "node",
+              "id": 213219004,
+              "lat": 42.343028,
+              "lon": -76.92377
+            },
+            {
+              "type": "node",
+              "id": 213219007,
+              "lat": 42.3434915,
+              "lon": -76.9241899
+            },
+            {
+              "type": "node",
+              "id": 213219010,
+              "lat": 42.3439675,
+              "lon": -76.9257086
+            },
+            {
+              "type": "node",
+              "id": 213219012,
+              "lat": 42.3440486,
+              "lon": -76.9262909
+            },
+            {
+              "type": "node",
+              "id": 213219015,
+              "lat": 42.34406,
+              "lon": -76.9263617
+            },
+            {
+              "type": "node",
+              "id": 213219018,
+              "lat": 42.3442596,
+              "lon": -76.9281486
+            },
+            {
+              "type": "node",
+              "id": 213219021,
+              "lat": 42.3439737,
+              "lon": -76.9285605
+            },
+            {
+              "type": "node",
+              "id": 213219023,
+              "lat": 42.3436526,
+              "lon": -76.9286041
+            },
+            {
+              "type": "node",
+              "id": 213219026,
+              "lat": 42.3383123,
+              "lon": -76.9290697
+            },
+            {
+              "type": "node",
+              "id": 213219028,
+              "lat": 42.3376712,
+              "lon": -76.92899
+            },
+            {
+              "type": "node",
+              "id": 213219030,
+              "lat": 42.3373651,
+              "lon": -76.9286411
+            },
+            {
+              "type": "node",
+              "id": 213219032,
+              "lat": 42.3372802,
+              "lon": -76.9282595
+            },
+            {
+              "type": "node",
+              "id": 213219033,
+              "lat": 42.3371868,
+              "lon": -76.9261006
+            },
+            {
+              "type": "node",
+              "id": 213219035,
+              "lat": 42.3368149,
+              "lon": -76.9250105
+            },
+            {
+              "type": "node",
+              "id": 213219037,
+              "lat": 42.3364852,
+              "lon": -76.9248288
+            },
+            {
+              "type": "node",
+              "id": 213223417,
+              "lat": 42.3428481,
+              "lon": -76.9285258
+            },
+            {
+              "type": "node",
+              "id": 213223420,
+              "lat": 42.3439968,
+              "lon": -76.9280042
+            },
+            {
+              "type": "node",
+              "id": 213223422,
+              "lat": 42.3441098,
+              "lon": -76.9276828
+            },
+            {
+              "type": "node",
+              "id": 638781625,
+              "lat": 42.3340249,
+              "lon": -76.9240827
+            },
+            {
+              "type": "node",
+              "id": 638875810,
+              "lat": 42.3436331,
+              "lon": -76.9283386
+            },
+            {
+              "type": "node",
+              "id": 638875815,
+              "lat": 42.333708,
+              "lon": -76.9204346
+            },
+            {
+              "type": "node",
+              "id": 638875818,
+              "lat": 42.3317255,
+              "lon": -76.9203568
+            },
+            {
+              "type": "node",
+              "id": 638875820,
+              "lat": 42.3437803,
+              "lon": -76.9247614
+            },
+            {
+              "type": "node",
+              "id": 638991383,
+              "lat": 42.3289187,
+              "lon": -76.9262332
+            },
+            {
+              "type": "node",
+              "id": 638991386,
+              "lat": 42.3342118,
+              "lon": -76.9282692
+            },
+            {
+              "type": "node",
+              "id": 638991388,
+              "lat": 42.3343911,
+              "lon": -76.9277431
+            },
+            {
+              "type": "node",
+              "id": 638991391,
+              "lat": 42.3334666,
+              "lon": -76.9247469
+            },
+            {
+              "type": "node",
+              "id": 638991392,
+              "lat": 42.3335773,
+              "lon": -76.9244005
+            },
+            {
+              "type": "node",
+              "id": 638991397,
+              "lat": 42.3337309,
+              "lon": -76.9242055
+            },
+            {
+              "type": "node",
+              "id": 638991418,
+              "lat": 42.3379234,
+              "lon": -76.9290792
+            },
+            {
+              "type": "node",
+              "id": 638991419,
+              "lat": 42.3387472,
+              "lon": -76.9289074
+            },
+            {
+              "type": "node",
+              "id": 638991422,
+              "lat": 42.3388695,
+              "lon": -76.9288745
+            },
+            {
+              "type": "node",
+              "id": 638991424,
+              "lat": 42.3396214,
+              "lon": -76.9287984
+            },
+            {
+              "type": "node",
+              "id": 638991431,
+              "lat": 42.3418434,
+              "lon": -76.9286122
+            },
+            {
+              "type": "node",
+              "id": 638991437,
+              "lat": 42.3370217,
+              "lon": -76.9252857
+            },
+            {
+              "type": "node",
+              "id": 638991438,
+              "lat": 42.3374459,
+              "lon": -76.9287734
+            },
+            {
+              "type": "node",
+              "id": 638991439,
+              "lat": 42.3442009,
+              "lon": -76.9283642
+            },
+            {
+              "type": "node",
+              "id": 638991440,
+              "lat": 42.3442541,
+              "lon": -76.9278016
+            },
+            {
+              "type": "node",
+              "id": 638991442,
+              "lat": 42.3439201,
+              "lon": -76.9253946
+            },
+            {
+              "type": "node",
+              "id": 638991443,
+              "lat": 42.3403605,
+              "lon": -76.9217827
+            },
+            {
+              "type": "node",
+              "id": 638991444,
+              "lat": 42.3313101,
+              "lon": -76.9203266
+            },
+            {
+              "type": "node",
+              "id": 638991445,
+              "lat": 42.3307115,
+              "lon": -76.9205372
+            },
+            {
+              "type": "node",
+              "id": 638991446,
+              "lat": 42.3302165,
+              "lon": -76.9219948
+            },
+            {
+              "type": "node",
+              "id": 638991447,
+              "lat": 42.3303924,
+              "lon": -76.9225906
+            },
+            {
+              "type": "node",
+              "id": 2967812525,
+              "lat": 42.3287896,
+              "lon": -76.9262814
+            },
+            {
+              "type": "node",
+              "id": 2967812526,
+              "lat": 42.32927,
+              "lon": -76.9278411
+            },
+            {
+              "type": "node",
+              "id": 2967812529,
+              "lat": 42.3339452,
+              "lon": -76.9283831
+            },
+            {
+              "type": "node",
+              "id": 2967812530,
+              "lat": 42.3340779,
+              "lon": -76.9283622
+            },
+            {
+              "type": "node",
+              "id": 2967812531,
+              "lat": 42.3342252,
+              "lon": -76.927072
+            },
+            {
+              "type": "node",
+              "id": 2967812532,
+              "lat": 42.3371563,
+              "lon": -76.9256816
+            },
+            {
+              "type": "node",
+              "id": 2967820335,
+              "lat": 42.3384086,
+              "lon": -76.9206675
+            },
+            {
+              "type": "node",
+              "id": 2967820339,
+              "lat": 42.3385685,
+              "lon": -76.9290404
+            },
+            {
+              "type": "node",
+              "id": 2967820342,
+              "lat": 42.3388089,
+              "lon": -76.928891
+            },
+            {
+              "type": "node",
+              "id": 2967820343,
+              "lat": 42.3392596,
+              "lon": -76.920874
+            },
+            {
+              "type": "node",
+              "id": 2967820352,
+              "lat": 42.3396786,
+              "lon": -76.9211247
+            },
+            {
+              "type": "node",
+              "id": 2967820356,
+              "lat": 42.3398165,
+              "lon": -76.9287777
+            },
+            {
+              "type": "node",
+              "id": 2967820362,
+              "lat": 42.3400873,
+              "lon": -76.9214742
+            },
+            {
+              "type": "node",
+              "id": 2967820363,
+              "lat": 42.3406799,
+              "lon": -76.9222809
+            },
+            {
+              "type": "node",
+              "id": 2967820366,
+              "lat": 42.3412524,
+              "lon": -76.9230746
+            },
+            {
+              "type": "node",
+              "id": 2967820369,
+              "lat": 42.3416175,
+              "lon": -76.9233388
+            },
+            {
+              "type": "node",
+              "id": 2967820370,
+              "lat": 42.3420412,
+              "lon": -76.9234876
+            },
+            {
+              "type": "node",
+              "id": 2967820371,
+              "lat": 42.3423866,
+              "lon": -76.9235432
+            },
+            {
+              "type": "node",
+              "id": 2967820372,
+              "lat": 42.342873,
+              "lon": -76.9236885
+            },
+            {
+              "type": "node",
+              "id": 2967820373,
+              "lat": 42.3432882,
+              "lon": -76.9239632
+            },
+            {
+              "type": "node",
+              "id": 2967820375,
+              "lat": 42.3436496,
+              "lon": -76.9244289
+            },
+            {
+              "type": "node",
+              "id": 2967820376,
+              "lat": 42.3438218,
+              "lon": -76.9282167
+            },
+            {
+              "type": "node",
+              "id": 2967820378,
+              "lat": 42.3440912,
+              "lon": -76.9277721
+            },
+            {
+              "type": "node",
+              "id": 2967820379,
+              "lat": 42.3442346,
+              "lon": -76.9276485
+            },
+            {
+              "type": "node",
+              "id": 4117038479,
+              "lat": 42.3323354,
+              "lon": -76.924769
+            },
+            {
+              "type": "node",
+              "id": 4117038480,
+              "lat": 42.332405,
+              "lon": -76.9248698
+            },
+            {
+              "type": "node",
+              "id": 4117038481,
+              "lat": 42.3324482,
+              "lon": -76.9249759
+            },
+            {
+              "type": "node",
+              "id": 4117038482,
+              "lat": 42.3325135,
+              "lon": -76.9251403
+            },
+            {
+              "type": "node",
+              "id": 4117038483,
+              "lat": 42.3325462,
+              "lon": -76.9253207
+            },
+            {
+              "type": "node",
+              "id": 4117038484,
+              "lat": 42.332558,
+              "lon": -76.9254374
+            },
+            {
+              "type": "node",
+              "id": 4117038485,
+              "lat": 42.332554,
+              "lon": -76.9255753
+            },
+            {
+              "type": "node",
+              "id": 4117038486,
+              "lat": 42.3325383,
+              "lon": -76.9257133
+            },
+            {
+              "type": "node",
+              "id": 4117038487,
+              "lat": 42.3325109,
+              "lon": -76.9258671
+            },
+            {
+              "type": "node",
+              "id": 4117038488,
+              "lat": 42.3324717,
+              "lon": -76.9259732
+            },
+            {
+              "type": "node",
+              "id": 4117039089,
+              "lat": 42.3324089,
+              "lon": -76.9260952
+            },
+            {
+              "type": "node",
+              "id": 4117039090,
+              "lat": 42.3323305,
+              "lon": -76.9261907
+            },
+            {
+              "type": "node",
+              "id": 4117039091,
+              "lat": 42.3322482,
+              "lon": -76.926265
+            },
+            {
+              "type": "node",
+              "id": 4117039092,
+              "lat": 42.3321736,
+              "lon": -76.926318
+            },
+            {
+              "type": "node",
+              "id": 4117039093,
+              "lat": 42.3320638,
+              "lon": -76.9263551
+            },
+            {
+              "type": "node",
+              "id": 4117039094,
+              "lat": 42.3319305,
+              "lon": -76.9263923
+            },
+            {
+              "type": "node",
+              "id": 4117039095,
+              "lat": 42.3317736,
+              "lon": -76.9264029
+            },
+            {
+              "type": "node",
+              "id": 4271812298,
+              "lat": 42.3335471,
+              "lon": -76.9204706
+            },
+            {
+              "type": "node",
+              "id": 4271812299,
+              "lat": 42.3332415,
+              "lon": -76.9207993
+            },
+            {
+              "type": "node",
+              "id": 4271812300,
+              "lat": 42.3331838,
+              "lon": -76.9208321
+            },
+            {
+              "type": "node",
+              "id": 4271812301,
+              "lat": 42.3330986,
+              "lon": -76.9208412
+            },
+            {
+              "type": "node",
+              "id": 4271812302,
+              "lat": 42.3329165,
+              "lon": -76.9208365
+            },
+            {
+              "type": "node",
+              "id": 4271812303,
+              "lat": 42.3327687,
+              "lon": -76.9208345
+            },
+            {
+              "type": "node",
+              "id": 4271812304,
+              "lat": 42.3326346,
+              "lon": -76.9208334
+            },
+            {
+              "type": "node",
+              "id": 4271812305,
+              "lat": 42.3324801,
+              "lon": -76.9207958
+            },
+            {
+              "type": "node",
+              "id": 4271812306,
+              "lat": 42.3322559,
+              "lon": -76.9205319
+            },
+            {
+              "type": "node",
+              "id": 4271812307,
+              "lat": 42.3321191,
+              "lon": -76.9204441
+            },
+            {
+              "type": "node",
+              "id": 6340979899,
+              "lat": 42.3338825,
+              "lon": -76.9241195
+            },
+            {
+              "type": "node",
+              "id": 6340979900,
+              "lat": 42.3335083,
+              "lon": -76.9245552
+            },
+            {
+              "type": "node",
+              "id": 6340979901,
+              "lat": 42.3367086,
+              "lon": -76.9249282
+            },
+            {
+              "type": "node",
+              "id": 6340979902,
+              "lat": 42.3369487,
+              "lon": -76.9251649
+            },
+            {
+              "type": "node",
+              "id": 6340979903,
+              "lat": 42.3370883,
+              "lon": -76.9254314
+            },
+            {
+              "type": "node",
+              "id": 6340979904,
+              "lat": 42.3377783,
+              "lon": -76.9290483
+            },
+            {
+              "type": "node",
+              "id": 6340979905,
+              "lat": 42.3375593,
+              "lon": -76.9288996
+            },
+            {
+              "type": "node",
+              "id": 6340979906,
+              "lat": 42.3372922,
+              "lon": -76.9284036
+            },
+            {
+              "type": "node",
+              "id": 6340979907,
+              "lat": 42.3435523,
+              "lon": -76.9283611
+            },
+            {
+              "type": "node",
+              "id": 6340979908,
+              "lat": 42.3440947,
+              "lon": -76.9285048
+            },
+            {
+              "type": "node",
+              "id": 6340979909,
+              "lat": 42.3442408,
+              "lon": -76.9282599
+            },
+            {
+              "type": "node",
+              "id": 6340979910,
+              "lat": 42.34386,
+              "lon": -76.9250509
+            },
+            {
+              "type": "node",
+              "id": 6340979911,
+              "lat": 42.3419334,
+              "lon": -76.9234669
+            },
+            {
+              "type": "node",
+              "id": 6340979912,
+              "lat": 42.3402101,
+              "lon": -76.9216051
+            },
+            {
+              "type": "node",
+              "id": 6340979913,
+              "lat": 42.338853,
+              "lon": -76.9207218
+            },
+            {
+              "type": "node",
+              "id": 6340979914,
+              "lat": 42.3334703,
+              "lon": -76.9205181
+            },
+            {
+              "type": "node",
+              "id": 6340979915,
+              "lat": 42.3308553,
+              "lon": -76.9204241
+            },
+            {
+              "type": "node",
+              "id": 6340979916,
+              "lat": 42.3305679,
+              "lon": -76.9206944
+            },
+            {
+              "type": "node",
+              "id": 6340979917,
+              "lat": 42.3302344,
+              "lon": -76.9214585
+            },
+            {
+              "type": "node",
+              "id": 6340979918,
+              "lat": 42.3309693,
+              "lon": -76.9231874
+            },
+            {
+              "type": "node",
+              "id": 6340979919,
+              "lat": 42.3311691,
+              "lon": -76.9232472
+            },
+            {
+              "type": "node",
+              "id": 6340979920,
+              "lat": 42.3290752,
+              "lon": -76.9262182
+            },
+            {
+              "type": "node",
+              "id": 6340979921,
+              "lat": 42.3285726,
+              "lon": -76.9265181
+            },
+            {
+              "type": "node",
+              "id": 6340979922,
+              "lat": 42.3284719,
+              "lon": -76.926934
+            },
+            {
+              "type": "node",
+              "id": 6340979923,
+              "lat": 42.3285729,
+              "lon": -76.9274017
+            },
+            {
+              "type": "node",
+              "id": 6340979924,
+              "lat": 42.3286716,
+              "lon": -76.9275531
+            },
+            {
+              "type": "node",
+              "id": 6340979925,
+              "lat": 42.3289013,
+              "lon": -76.9277406
+            },
+            {
+              "type": "node",
+              "id": 6340979926,
+              "lat": 42.3343053,
+              "lon": -76.9281083
+            },
+            {
+              "type": "node",
+              "id": 6340979927,
+              "lat": 42.3343712,
+              "lon": -76.9275346
+            },
+            {
+              "type": "node",
+              "id": 6340979928,
+              "lat": 42.3334597,
+              "lon": -76.924859
+            },
+            {
+              "type": "node",
+              "id": 11509965245,
+              "lat": 42.3438992,
+              "lon": -76.9252482
+            },
+            {
+              "type": "node",
+              "id": 11509965246,
+              "lat": 42.3441015,
+              "lon": -76.9265398
+            },
+            {
+              "type": "node",
+              "id": 11509965247,
+              "lat": 42.3440572,
+              "lon": -76.9265576
+            },
+            {
+              "type": "node",
+              "id": 11509965248,
+              "lat": 42.3441114,
+              "lon": -76.9269567
+            },
+            {
+              "type": "node",
+              "id": 11509965249,
+              "lat": 42.3441295,
+              "lon": -76.9271268
+            },
+            {
+              "type": "node",
+              "id": 11509965250,
+              "lat": 42.3441361,
+              "lon": -76.9272976
+            },
+            {
+              "type": "node",
+              "id": 11509965251,
+              "lat": 42.3441322,
+              "lon": -76.9274506
+            },
+            {
+              "type": "node",
+              "id": 11509965252,
+              "lat": 42.3441257,
+              "lon": -76.9275599
+            },
+            {
+              "type": "node",
+              "id": 11509965253,
+              "lat": 42.3440674,
+              "lon": -76.9278526
+            },
+            {
+              "type": "node",
+              "id": 11509965254,
+              "lat": 42.3440343,
+              "lon": -76.9279311
+            },
+            {
+              "type": "node",
+              "id": 11509965255,
+              "lat": 42.3439516,
+              "lon": -76.9280715
+            },
+            {
+              "type": "node",
+              "id": 11509965256,
+              "lat": 42.3439099,
+              "lon": -76.9281288
+            },
+            {
+              "type": "node",
+              "id": 11509965257,
+              "lat": 42.3438721,
+              "lon": -76.9281725
+            },
+            {
+              "type": "node",
+              "id": 11509965258,
+              "lat": 42.3437619,
+              "lon": -76.9282672
+            },
+            {
+              "type": "node",
+              "id": 11509965259,
+              "lat": 42.3436978,
+              "lon": -76.9283086
+            },
+            {
+              "type": "node",
+              "id": 11509965260,
+              "lat": 42.3431931,
+              "lon": -76.928436
+            },
+            {
+              "type": "node",
+              "id": 11510080853,
+              "lat": 42.3438215,
+              "lon": -76.9249054
+            },
+            {
+              "type": "node",
+              "id": 11510080854,
+              "lat": 42.3437212,
+              "lon": -76.9245904
+            },
+            {
+              "type": "node",
+              "id": 11510080855,
+              "lat": 42.3435652,
+              "lon": -76.9242912
+            },
+            {
+              "type": "node",
+              "id": 11510080856,
+              "lat": 42.3434001,
+              "lon": -76.9240735
+            },
+            {
+              "type": "node",
+              "id": 11510080857,
+              "lat": 42.3431346,
+              "lon": -76.9238414
+            },
+            {
+              "type": "node",
+              "id": 11510080858,
+              "lat": 42.3427292,
+              "lon": -76.9236252
+            },
+            {
+              "type": "node",
+              "id": 11510080859,
+              "lat": 42.3418574,
+              "lon": -76.923446
+            },
+            {
+              "type": "node",
+              "id": 11510080860,
+              "lat": 42.3417114,
+              "lon": -76.9233904
+            },
+            {
+              "type": "node",
+              "id": 11510080861,
+              "lat": 42.3413448,
+              "lon": -76.923158
+            },
+            {
+              "type": "node",
+              "id": 11510080862,
+              "lat": 42.3411486,
+              "lon": -76.9229732
+            },
+            {
+              "type": "node",
+              "id": 11510080863,
+              "lat": 42.3409504,
+              "lon": -76.9227256
+            },
+            {
+              "type": "node",
+              "id": 11510080864,
+              "lat": 42.3408622,
+              "lon": -76.9225914
+            },
+            {
+              "type": "node",
+              "id": 11510080865,
+              "lat": 42.340471,
+              "lon": -76.9219361
+            },
+            {
+              "type": "node",
+              "id": 11510080866,
+              "lat": 42.3399507,
+              "lon": -76.9213462
+            },
+            {
+              "type": "node",
+              "id": 11510080867,
+              "lat": 42.3393718,
+              "lon": -76.9209323
+            },
+            {
+              "type": "node",
+              "id": 11510080868,
+              "lat": 42.339601,
+              "lon": -76.9210683
+            },
+            {
+              "type": "node",
+              "id": 11510080869,
+              "lat": 42.3390833,
+              "lon": -76.9207943
+            },
+            {
+              "type": "node",
+              "id": 11510080870,
+              "lat": 42.3389862,
+              "lon": -76.9207587
+            },
+            {
+              "type": "node",
+              "id": 11510080871,
+              "lat": 42.3386445,
+              "lon": -76.92068
+            },
+            {
+              "type": "node",
+              "id": 11510080877,
+              "lat": 42.3385213,
+              "lon": -76.9206735
+            },
+            {
+              "type": "node",
+              "id": 11510098829,
+              "lat": 42.3371256,
+              "lon": -76.9255363
+            },
+            {
+              "type": "node",
+              "id": 11510098830,
+              "lat": 42.3371716,
+              "lon": -76.9258285
+            },
+            {
+              "type": "node",
+              "id": 11510098831,
+              "lat": 42.3366045,
+              "lon": -76.9248719
+            },
+            {
+              "type": "node",
+              "id": 11510098832,
+              "lat": 42.3368794,
+              "lon": -76.9250812
+            },
+            {
+              "type": "node",
+              "id": 11510142180,
+              "lat": 42.3440459,
+              "lon": -76.9285379
+            },
+            {
+              "type": "node",
+              "id": 11510142181,
+              "lat": 42.3441438,
+              "lon": -76.9284549
+            },
+            {
+              "type": "node",
+              "id": 11510142182,
+              "lat": 42.3442677,
+              "lon": -76.9279689
+            },
+            {
+              "type": "node",
+              "id": 11510173368,
+              "lat": 42.3320036,
+              "lon": -76.9204108
+            },
+            {
+              "type": "node",
+              "id": 11510215169,
+              "lat": 42.3323898,
+              "lon": -76.9206971
+            },
+            {
+              "type": "node",
+              "id": 11510215170,
+              "lat": 42.3325478,
+              "lon": -76.9208262
+            },
+            {
+              "type": "node",
+              "id": 11510215171,
+              "lat": 42.3332941,
+              "lon": -76.9207356
+            },
+            {
+              "type": "node",
+              "id": 11510215172,
+              "lat": 42.3333697,
+              "lon": -76.9206173
+            },
+            {
+              "type": "node",
+              "id": 11510310579,
+              "lat": 42.337319,
+              "lon": -76.9285285
+            }
+          ]
+        },
+        "overpass_query": "[out:json];(way[\"highway\"=\"raceway\"](42.3255159,-76.9306402,42.3472502,-76.9168765);way[\"leisure\"=\"track\"](42.3255159,-76.9306402,42.3472502,-76.9168765);relation[\"type\"=\"route\"][\"route\"=\"raceway\"](42.3255159,-76.9306402,42.3472502,-76.9168765);relation[\"route\"=\"raceway\"](42.3255159,-76.9306402,42.3472502,-76.9168765);relation[\"leisure\"=\"track\"](42.3255159,-76.9306402,42.3472502,-76.9168765);relation[\"type\"=\"multipolygon\"][\"leisure\"=\"track\"](42.3255159,-76.9306402,42.3472502,-76.9168765););out body;>;out geom;",
+        "nominatim_bbox": [
+          42.3255159,
+          -76.9306402,
+          42.3472502,
+          -76.9168765
+        ]
+      }
+    }
+  ]
+}

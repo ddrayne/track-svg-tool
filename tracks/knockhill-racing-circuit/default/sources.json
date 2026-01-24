@@ -1,0 +1,660 @@
+{
+  "query": "Knockhill Racing Circuit",
+  "chosen": {
+    "source_type": "wikimedia_svg",
+    "title": "File:Knockhill track map.svg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Knockhill_track_map.svg",
+    "score": 0.9700000000000002,
+    "payload": {
+      "imageinfo": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Knockhill_track_map.svg",
+        "descriptionurl": "https://commons.wikimedia.org/wiki/File:Knockhill_track_map.svg",
+        "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=8355115",
+        "extmetadata": {
+          "DateTime": {
+            "value": "2009-11-06 10:23:47",
+            "source": "mediawiki-metadata",
+            "hidden": ""
+          },
+          "ObjectName": {
+            "value": "Knockhill track map",
+            "source": "mediawiki-metadata"
+          },
+          "CommonsMetadataExtension": {
+            "value": 1.2,
+            "source": "extension",
+            "hidden": ""
+          },
+          "Categories": {
+            "value": "Self-published work|Unspec SVG created with Inkscape|Files with coordinates missing SDC location of creation|Unspec New SVG created with Inkscape|Knockhill circuit maps",
+            "source": "commons-categories",
+            "hidden": ""
+          },
+          "Assessments": {
+            "value": "",
+            "source": "commons-categories",
+            "hidden": ""
+          },
+          "GPSLatitude": {
+            "value": "56.129639",
+            "source": "commons-desc-page"
+          },
+          "GPSLongitude": {
+            "value": "-3.506028",
+            "source": "commons-desc-page"
+          },
+          "GPSMapDatum": {
+            "value": "WGS-84",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "ImageDescription": {
+            "value": "Track map for use with <a href=\"https://en.wikipedia.org/wiki/Knockhill_Racing_Circuit\" class=\"extiw\" title=\"w:Knockhill Racing Circuit\">Knockhill Racing Circuit</a>",
+            "source": "commons-desc-page"
+          },
+          "DateTimeOriginal": {
+            "value": "2009-11-06",
+            "source": "commons-desc-page"
+          },
+          "Credit": {
+            "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+            "source": "commons-desc-page"
+          },
+          "Artist": {
+            "value": "<a href=\"//commons.wikimedia.org/wiki/User:Will_Pittenger\" title=\"User:Will Pittenger\">Will Pittenger</a>",
+            "source": "commons-desc-page"
+          },
+          "LicenseShortName": {
+            "value": "CC BY-SA 3.0",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "UsageTerms": {
+            "value": "Creative Commons Attribution-Share Alike 3.0",
+            "source": "commons-desc-page"
+          },
+          "AttributionRequired": {
+            "value": "true",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "LicenseUrl": {
+            "value": "https://creativecommons.org/licenses/by-sa/3.0",
+            "source": "commons-desc-page"
+          },
+          "Copyrighted": {
+            "value": "True",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "Restrictions": {
+            "value": "",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "License": {
+            "value": "cc-by-sa-3.0",
+            "source": "commons-templates",
+            "hidden": ""
+          }
+        },
+        "mime": "image/svg+xml"
+      }
+    }
+  },
+  "candidates": [
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Knockhill track map.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Knockhill_track_map.svg",
+      "score": 0.9700000000000002,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Knockhill_track_map.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Knockhill_track_map.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=8355115",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2009-11-06 10:23:47",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Knockhill track map",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Self-published work|Unspec SVG created with Inkscape|Files with coordinates missing SDC location of creation|Unspec New SVG created with Inkscape|Knockhill circuit maps",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "GPSLatitude": {
+              "value": "56.129639",
+              "source": "commons-desc-page"
+            },
+            "GPSLongitude": {
+              "value": "-3.506028",
+              "source": "commons-desc-page"
+            },
+            "GPSMapDatum": {
+              "value": "WGS-84",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Track map for use with <a href=\"https://en.wikipedia.org/wiki/Knockhill_Racing_Circuit\" class=\"extiw\" title=\"w:Knockhill Racing Circuit\">Knockhill Racing Circuit</a>",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "2009-11-06",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<a href=\"//commons.wikimedia.org/wiki/User:Will_Pittenger\" title=\"User:Will Pittenger\">Will Pittenger</a>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "CC BY-SA 3.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Creative Commons Attribution-Share Alike 3.0",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "true",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/3.0",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-3.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Knockhill track map.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Knockhill_track_map.svg",
+      "score": 0.8500000000000001,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Knockhill_track_map.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Knockhill_track_map.svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=8355115",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2009-11-06 10:23:47",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Knockhill track map",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "Self-published work|Unspec SVG created with Inkscape|Files with coordinates missing SDC location of creation|Unspec New SVG created with Inkscape|Knockhill circuit maps",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "GPSLatitude": {
+              "value": "56.129639",
+              "source": "commons-desc-page"
+            },
+            "GPSLongitude": {
+              "value": "-3.506028",
+              "source": "commons-desc-page"
+            },
+            "GPSMapDatum": {
+              "value": "WGS-84",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Track map for use with <a href=\"https://en.wikipedia.org/wiki/Knockhill_Racing_Circuit\" class=\"extiw\" title=\"w:Knockhill Racing Circuit\">Knockhill Racing Circuit</a>",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "2009-11-06",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<a href=\"//commons.wikimedia.org/wiki/User:Will_Pittenger\" title=\"User:Will Pittenger\">Will Pittenger</a>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "CC BY-SA 3.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Creative Commons Attribution-Share Alike 3.0",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "true",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/3.0",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-3.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Ambox important.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/en/b/b4/Ambox_important.svg",
+      "score": 0.74,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/en/b/b4/Ambox_important.svg",
+          "descriptionurl": "https://en.wikipedia.org/wiki/File:Ambox_important.svg",
+          "descriptionshorturl": "https://en.wikipedia.org/w/index.php?curid=60534523",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2019-04-19 16:56:13",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Ambox important",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "All free media|Copyright holder released public domain files|Wikipedia files on Wikimedia Commons for which a local copy has been requested to be kept|Wikipedia upload-protected files|Wikipedia images in SVG format|Wikipedia fully protected files|Wikipedia indefinitely move-protected pages",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "<p>English: <span lang=\"en\">Exclamation mark for ambox use</span>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<p>Copied from <a href=\"https://commons.wikimedia.org/wiki/File:Ambox_important.svg\" class=\"extiw\" title=\"c:File:Ambox important.svg\">c:File:Ambox important.svg</a>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "<p>2008-05-13\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<p><a href=\"//en.wikipedia.org/wiki/User:Dsmurat\" title=\"User:Dsmurat\">Dsmurat</a>, <a href=\"//en.wikipedia.org/wiki/User:Penubag\" title=\"User:Penubag\">penubag</a>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "Public domain",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Public domain",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "false",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseUrl": {
+              "value": "//en.wikipedia.org/wiki/File:Ambox_important.svg",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "False",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "pd",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:OOjs UI icon edit-ltr-progressive.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/en/8/8a/OOjs_UI_icon_edit-ltr-progressive.svg",
+      "score": 0.74,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/en/8/8a/OOjs_UI_icon_edit-ltr-progressive.svg",
+          "descriptionurl": "https://en.wikipedia.org/wiki/File:OOjs_UI_icon_edit-ltr-progressive.svg",
+          "descriptionshorturl": "https://en.wikipedia.org/w/index.php?curid=61571911",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2019-08-21 11:26:11",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "OOjs UI icon edit-ltr-progressive",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "All free media|Wikipedia files on Wikimedia Commons for which a local copy has been requested to be kept|Wikipedia upload-protected files|Wikipedia images in SVG format|Public domain images ineligible for copyright (simple)",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "<p>English: <span lang=\"en\">An icon from the OOjs UI MediaWiki lib.</span>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<p><a class=\"external text\" href=\"https://phabricator.wikimedia.org/diffusion/GVED/browse/master/lib/oojs-ui/themes/mediawiki/images/icons/\">lib/oojs-ui/themes/mediawiki/images/icons/</a>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<p><a class=\"external free\" href=\"https://phabricator.wikimedia.org/diffusion/GOJU/browse/master/AUTHORS.txt\">https://phabricator.wikimedia.org/diffusion/GOJU/browse/master/AUTHORS.txt</a>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Permission": {
+              "value": "<p><a class=\"external free\" href=\"https://phabricator.wikimedia.org/diffusion/GOJU/browse/master/LICENSE-MIT\">https://phabricator.wikimedia.org/diffusion/GOJU/browse/master/LICENSE-MIT</a>\n</p><p><br>\n</p>",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseShortName": {
+              "value": "PD",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Public domain",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "false",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Copyrighted": {
+              "value": "False",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "pd",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Question book-new.svg",
+      "url": "https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg",
+      "score": 0.74,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg",
+          "descriptionurl": "https://en.wikipedia.org/wiki/File:Question_book-new.svg",
+          "descriptionshorturl": "https://en.wikipedia.org/w/index.php?curid=22263385",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2021-07-26 20:34:42",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Question book-new",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "All free media|GFDL files|Creative Commons Attribution-ShareAlike 3.0 files|Wikipedia files on Wikimedia Commons for which a local copy has been requested to be kept|Wikipedia images in SVG format|Wikipedia fully protected files|Wikipedia license migration completed|Wikipedia indefinitely move-protected pages",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "<p>English: <span lang=\"en\">A new incarnation of <a href=\"//en.wikipedia.org/wiki/File:Question_book-3.svg\" title=\"File:Question book-3.svg\">Image:Question_book-3.svg</a>, which was uploaded by user <a href=\"//en.wikipedia.org/wiki/User:AzaToth\" title=\"User:AzaToth\">AzaToth</a></span>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<p>Created from scratch in Adobe Illustrator. Based on <a href=\"//en.wikipedia.org/wiki/File:Question_book.png\" title=\"File:Question book.png\">Image:Question book.png</a> created by <a href=\"//en.wikipedia.org/wiki/User:Equazcion\" title=\"User:Equazcion\">User:Equazcion</a>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "<p>May 29, 2008\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "<p><a href=\"//en.wikipedia.org/wiki/User:Tkgd2007\" title=\"User:Tkgd2007\">Tkgd2007</a>\n</p>",
+              "source": "commons-desc-page"
+            },
+            "Permission": {
+              "value": "<p>See licensing.\n</p>",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "LicenseShortName": {
+              "value": "Cc-by-sa-3.0",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Attribution-ShareAlike 3.0",
+              "source": "commons-desc-page"
+            },
+            "LicenseUrl": {
+              "value": "https://creativecommons.org/licenses/by-sa/3.0/",
+              "source": "commons-desc-page"
+            },
+            "Copyrighted": {
+              "value": "True",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "cc-by-sa-3.0",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    },
+    {
+      "source_type": "wikimedia_svg",
+      "title": "File:Flag of Australia (converted).svg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
+      "score": 0.54,
+      "payload": {
+        "imageinfo": {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
+          "descriptionurl": "https://commons.wikimedia.org/wiki/File:Flag_of_Australia_(converted).svg",
+          "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=1993651",
+          "extmetadata": {
+            "DateTime": {
+              "value": "2025-05-28 08:27:42",
+              "source": "mediawiki-metadata",
+              "hidden": ""
+            },
+            "ObjectName": {
+              "value": "Flag of Australia (converted)",
+              "source": "mediawiki-metadata"
+            },
+            "CommonsMetadataExtension": {
+              "value": 1.2,
+              "source": "extension",
+              "hidden": ""
+            },
+            "Categories": {
+              "value": "PD-Australia|With insignia|Files allowed to be overwritten by everyone|SVG national flag of Australia|Valid SVG created with Text Editor:Flags|SVG simplified flags\u25cfZero|SVG state / government ensigns of Australia",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "Assessments": {
+              "value": "",
+              "source": "commons-categories",
+              "hidden": ""
+            },
+            "ImageDescription": {
+              "value": "Flag of Australia, when congruence with <a href=\"//commons.wikimedia.org/wiki/Commons:Pantone_color_chart/British_flag_colours\" title=\"Commons:Pantone color chart/British flag colours\">this colour chart</a> is required (i.e. when a \"less bright\" version is needed).\nSee <a href=\"//commons.wikimedia.org/wiki/File:Flag_of_Australia.svg\" title=\"File:Flag of Australia.svg\">Flag of Australia.svg</a> for main file information.",
+              "source": "commons-desc-page"
+            },
+            "DateTimeOriginal": {
+              "value": "1934-03-23",
+              "source": "commons-desc-page"
+            },
+            "Credit": {
+              "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+              "source": "commons-desc-page"
+            },
+            "Artist": {
+              "value": "Unknown <br> (Vector graphics image by <a href=\"//commons.wikimedia.org/wiki/User:Ian_Fieggen\" title=\"User:Ian Fieggen\">Ian Fieggen</a>) (only minor code changes by uploader.)",
+              "source": "commons-desc-page"
+            },
+            "LicenseShortName": {
+              "value": "Public domain",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "UsageTerms": {
+              "value": "Public domain",
+              "source": "commons-desc-page"
+            },
+            "AttributionRequired": {
+              "value": "false",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Copyrighted": {
+              "value": "False",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "Restrictions": {
+              "value": "insignia",
+              "source": "commons-desc-page",
+              "hidden": ""
+            },
+            "License": {
+              "value": "pd",
+              "source": "commons-templates",
+              "hidden": ""
+            }
+          },
+          "mime": "image/svg+xml"
+        }
+      }
+    }
+  ]
+}
