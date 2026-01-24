@@ -1,3 +1,38 @@
+# TrackFactory Viewer
+
+This is a local viewer/editor for TrackFactory outputs. It can load `canonical.json`,
+review SVGs, place labels, and export SVG/labels.
+
+## Run locally
+
+Start the API (spawns the `tf` CLI):
+
+```bash
+npm run api
+```
+
+Start the Vite dev server:
+
+```bash
+npm run dev
+```
+
+Open the app at `http://localhost:5173`.
+
+The viewer fetches track files from `/tracks/...` by default. For local dev, set the
+base URL field to an `@fs` path like:
+
+```
+/@fs/C:/Users/danie/Documents/Code/track-tool/tracks
+```
+
+The API also provides `/api/tracks/.../outputs` to list the files created by the CLI.
+
+## Notes
+
+- The API expects `tf` to be on your PATH.
+- `TRACKS_ROOT` and `PORT` env vars are supported by the API.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

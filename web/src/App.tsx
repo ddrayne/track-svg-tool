@@ -19,6 +19,12 @@ type StyleSettings = {
   labelSize: number
 }
 
+type OutputFile = {
+  name: string
+  size: number
+  updatedAt: number
+}
+
 const DEFAULT_STYLE: StyleSettings = {
   stroke: '#101010',
   strokeWidth: 6,
@@ -34,6 +40,7 @@ function App() {
   const [config, setConfig] = useState(DEFAULT_CONFIG)
   const [baseUrl, setBaseUrl] = useState(() => localStorage.getItem('tf.baseUrl') ?? '/tracks')
   const [svgFileName, setSvgFileName] = useState('source_wiki.svg')
+  const [apiBase, setApiBase] = useState(() => localStorage.getItem('tf.apiBase') ?? '/api')
   const [mode, setMode] = useState<'canonical' | 'svg'>('canonical')
   const [canonical, setCanonical] = useState<Canonical | null>(null)
   const [canonicalText, setCanonicalText] = useState('')
@@ -43,6 +50,14 @@ function App() {
   const [labelMode, setLabelMode] = useState(false)
   const [style, setStyle] = useState<StyleSettings>(DEFAULT_STYLE)
   const [status, setStatus] = useState<string | null>(null)
+  const [intakeQuery, setIntakeQuery] = useState(DEFAULT_TRACK_ID)
+  const [intakeSlug, setIntakeSlug] = useState('')
+  const [intakeConfig, setIntakeConfig] = useState(DEFAULT_CONFIG)
+  const [intakeVerbose, setIntakeVerbose] = useState(true)
+  const [buildLog, setBuildLog] = useState('')
+  const [outputs, setOutputs] = useState<OutputFile[]>([])
+  const [previewName, setPreviewName] = useState<string | null>(null)
+  const [previewText, setPreviewText] = useState('')
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   const basePath = useMemo(() => {
@@ -51,7 +66,22 @@ function App() {
     return trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed
   }, [baseUrl])
 
+  const apiPath = useMemo(() => {
+    const trimmed = apiBase.trim()
+    if (!trimmed) return '/api'
+    return trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed
+  }, [apiBase])
+
   const buildTrackUrl = (filename: string) => `${basePath}/${trackId}/${config}/${filename}`
+
+  const slugify = (value: string) =>
+    value
+      .normalize('NFKD')
+      .replace(/[^\x00-\x7F]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/-{2,}/g, '-')
+      .replace(/^-|-$/g, '')
 
   const points = useMemo(() => canonical?.centerline ?? [], [canonical])
   const viewBox = useMemo(() => {
@@ -142,6 +172,58 @@ function App() {
     setStatusLine(`Loaded SVG from file: ${file.name}`)
   }
 
+  const loadTextPreview = async (filename: string) => {
+    try {
+      const resp = await fetch(buildTrackUrl(filename))
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+      const text = await resp.text()
+      setPreviewName(filename)
+      setPreviewText(text)
+    } catch (err) {
+      setStatusLine(`Failed to preview ${filename}: ${String(err)}`)
+    }
+  }
+
+  const loadSvgFromPath = async (filename: string) => {
+    try {
+      const resp = await fetch(buildTrackUrl(filename))
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+      const text = await resp.text()
+      setSvgSource(text)
+      setMode('svg')
+      setStatusLine(`Loaded ${filename}`)
+    } catch (err) {
+      setStatusLine(`Failed to load ${filename}: ${String(err)}`)
+    }
+  }
+
+  const loadCanonicalFromPathNamed = async (filename: string) => {
+    try {
+      const resp = await fetch(buildTrackUrl(filename))
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+      const text = await resp.text()
+      const parsed = JSON.parse(text) as Canonical
+      setCanonical(parsed)
+      setCanonicalText(JSON.stringify(parsed, null, 2))
+      setMode('canonical')
+      setStatusLine(`Loaded ${filename}`)
+    } catch (err) {
+      setStatusLine(`Failed to load ${filename}: ${String(err)}`)
+    }
+  }
+
+  const loadLabelsFromPathNamed = async (filename: string) => {
+    try {
+      const resp = await fetch(buildTrackUrl(filename))
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+      const parsed = (await resp.json()) as Label[]
+      setLabels(parsed)
+      setStatusLine(`Loaded ${filename}`)
+    } catch (err) {
+      setStatusLine(`Failed to load ${filename}: ${String(err)}`)
+    }
+  }
+
   const applyCanonicalJson = () => {
     try {
       const parsed = JSON.parse(canonicalText) as Canonical
@@ -198,9 +280,105 @@ function App() {
     setLabels((prev) => [...prev, { id: `${Date.now()}`, x, y, text }])
   }
 
+  const callApi = async (path: string, body?: Record<string, unknown>): Promise<any> => {
+    const resp = await fetch(`${apiPath}${path}`, {
+      method: body ? 'POST' : 'GET',
+      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
+    })
+    if (!resp.ok) {
+      throw new Error(`HTTP ${resp.status}`)
+    }
+    return await resp.json()
+  }
+
+  const refreshOutputs = async () => {
+    try {
+      const data = (await callApi(`/tracks/${trackId}/${config}/outputs`)) as {
+        ok: boolean
+        files?: OutputFile[]
+      }
+      if (data.ok && Array.isArray(data.files)) {
+        setOutputs(data.files)
+        setStatusLine(`Loaded outputs for ${trackId}/${config}`)
+      } else {
+        setStatusLine('Failed to list outputs')
+      }
+    } catch (err) {
+      setStatusLine(`Failed to list outputs: ${String(err)}`)
+    }
+  }
+
+  const runBuild = async (variants: boolean) => {
+    const query = intakeQuery.trim()
+    if (!query) {
+      setStatusLine('Missing intake query')
+      return
+    }
+    setBuildLog('')
+    try {
+      const payload = {
+        query,
+        outSlug: intakeSlug.trim() || undefined,
+        config: intakeConfig.trim() || undefined,
+        verbose: intakeVerbose,
+        variants,
+      }
+      const data = (await callApi('/build', payload)) as {
+        ok: boolean
+        stdout?: string
+        stderr?: string
+      }
+      const stdout = String(data.stdout ?? '')
+      const stderr = String(data.stderr ?? '')
+      setBuildLog([stdout, stderr].filter(Boolean).join('\n'))
+      const nextTrack = slugify(intakeSlug.trim() || query)
+      if (nextTrack) setTrackId(nextTrack)
+      if (intakeConfig.trim()) setConfig(intakeConfig.trim())
+      setStatusLine(data.ok ? 'Build complete' : 'Build failed')
+      if (data.ok) refreshOutputs()
+    } catch (err) {
+      setStatusLine(`Build failed: ${String(err)}`)
+    }
+  }
+
+  const runQa = async () => {
+    try {
+      const data = (await callApi('/qa', { trackId, config })) as {
+        ok: boolean
+        stdout?: string
+        stderr?: string
+      }
+      setBuildLog([String(data.stdout ?? ''), String(data.stderr ?? '')].filter(Boolean).join('\n'))
+      setStatusLine(data.ok ? 'QA updated' : 'QA failed')
+      if (data.ok) refreshOutputs()
+    } catch (err) {
+      setStatusLine(`QA failed: ${String(err)}`)
+    }
+  }
+
+  const runRender = async () => {
+    try {
+      const data = (await callApi('/render', { trackId, config })) as {
+        ok: boolean
+        stdout?: string
+        stderr?: string
+      }
+      setBuildLog([String(data.stdout ?? ''), String(data.stderr ?? '')].filter(Boolean).join('\n'))
+      setStatusLine(data.ok ? 'Render updated' : 'Render failed')
+      if (data.ok) refreshOutputs()
+    } catch (err) {
+      setStatusLine(`Render failed: ${String(err)}`)
+    }
+  }
+
   useEffect(() => {
     localStorage.setItem('tf.baseUrl', baseUrl)
   }, [baseUrl])
+
+  useEffect(() => {
+    localStorage.setItem('tf.apiBase', apiBase)
+  }, [apiBase])
 
   useEffect(() => {
     loadCanonicalFromPath()
@@ -219,6 +397,14 @@ function App() {
         <aside className="panel">
           <section className="panel__section">
             <h2>Load</h2>
+            <div className="field">
+              <label>API base URL</label>
+              <input
+                value={apiBase}
+                onChange={(e) => setApiBase(e.target.value)}
+                placeholder="/api or http://localhost:5174/api"
+              />
+            </div>
             <div className="field">
               <label>Tracks base URL</label>
               <input
@@ -253,6 +439,65 @@ function App() {
             <div className="field">
               <label>Open SVG</label>
               <input type="file" accept="image/svg+xml" onChange={(e) => handleSvgFile(e.target.files?.[0])} />
+            </div>
+          </section>
+
+          <section className="panel__section">
+            <h2>Track Intake</h2>
+            <div className="field">
+              <label>Query</label>
+              <input value={intakeQuery} onChange={(e) => setIntakeQuery(e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Out slug</label>
+              <input value={intakeSlug} onChange={(e) => setIntakeSlug(e.target.value)} placeholder="optional" />
+            </div>
+            <div className="field">
+              <label>Config</label>
+              <input value={intakeConfig} onChange={(e) => setIntakeConfig(e.target.value)} />
+            </div>
+            <label className="toggle">
+              <input type="checkbox" checked={intakeVerbose} onChange={(e) => setIntakeVerbose(e.target.checked)} />
+              <span>Verbose CLI</span>
+            </label>
+            <div className="button-row">
+              <button onClick={() => runBuild(false)}>Build track</button>
+              <button onClick={() => runBuild(true)}>Build variants</button>
+            </div>
+            <div className="button-row">
+              <button onClick={runQa}>Run QA</button>
+              <button onClick={runRender}>Render</button>
+            </div>
+          </section>
+
+          <section className="panel__section">
+            <h2>Outputs</h2>
+            <div className="button-row">
+              <button onClick={refreshOutputs}>Refresh list</button>
+            </div>
+            <div className="output-list">
+              {outputs.length === 0 ? (
+                <div className="muted">No outputs loaded</div>
+              ) : (
+                outputs.map((file) => {
+                  const lower = file.name.toLowerCase()
+                  return (
+                    <div key={file.name} className="output-row">
+                      <span>{file.name}</span>
+                      <div className="output-actions">
+                        <button onClick={() => loadTextPreview(file.name)}>Preview</button>
+                        {lower.endsWith('.svg') && <button onClick={() => loadSvgFromPath(file.name)}>Open SVG</button>}
+                        {file.name === 'canonical.json' && (
+                          <button onClick={() => loadCanonicalFromPathNamed(file.name)}>Load canonical</button>
+                        )}
+                        {file.name === 'labels.json' && (
+                          <button onClick={() => loadLabelsFromPathNamed(file.name)}>Load labels</button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              )}
             </div>
           </section>
 
@@ -360,16 +605,26 @@ function App() {
               <div className="viewer__svg" dangerouslySetInnerHTML={{ __html: svgSource || '<p>no svg loaded</p>' }} />
             )}
           </div>
-          <div className="viewer__editor">
-            <div className="editor__header">canonical.json</div>
-            <textarea
-              value={canonicalText}
-              onChange={(e) => setCanonicalText(e.target.value)}
-              placeholder="Load canonical.json or paste it here"
-            />
+          <div className="viewer__split">
+            <div className="viewer__editor">
+              <div className="editor__header">canonical.json</div>
+              <textarea
+                value={canonicalText}
+                onChange={(e) => setCanonicalText(e.target.value)}
+                placeholder="Load canonical.json or paste it here"
+              />
+            </div>
+            <div className="viewer__editor">
+              <div className="editor__header">{previewName ?? 'file preview'}</div>
+              <textarea value={previewText} readOnly placeholder="Select an output to preview" />
+            </div>
           </div>
         </section>
       </main>
+      <footer className="app__footer">
+        <div className="footer__label">CLI log</div>
+        <textarea value={buildLog} readOnly placeholder="CLI output will appear here" />
+      </footer>
     </div>
   )
 }
