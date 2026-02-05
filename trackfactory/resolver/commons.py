@@ -96,7 +96,7 @@ def search_commons(query: str, limit: int = 5) -> list[Candidate]:
             "action": "query",
             "titles": "|".join(titles),
             "prop": "imageinfo",
-            "iiprop": "url|mime|extmetadata",
+            "iiprop": "url|mime|extmetadata|user",
             "format": "json",
         }
         try:
@@ -131,3 +131,32 @@ def search_commons(query: str, limit: int = 5) -> list[Candidate]:
 
     sorted_candidates = sorted(candidates.values(), key=lambda c: c.score, reverse=True)
     return sorted_candidates[:limit]
+
+
+def _strip_html(html: str) -> str:
+    """Remove HTML tags and collapse whitespace to produce plain text."""
+    text = re.sub(r"<[^>]+>", " ", html)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def extract_commons_metadata(candidate: Candidate) -> dict:
+    """Extract license and attribution from a Wikimedia Commons candidate's payload."""
+    ext = candidate.payload.get("imageinfo", {}).get("extmetadata", {})
+
+    license_name = ext.get("LicenseShortName", {}).get("value", "")
+    license_url = ext.get("LicenseUrl", {}).get("value", "")
+    if license_name and license_url:
+        license_str = f"{license_name} ({license_url})"
+    elif license_name:
+        license_str = license_name
+    else:
+        license_str = None
+
+    artist_html = ext.get("Artist", {}).get("value", "")
+    attribution = _strip_html(artist_html) if artist_html else None
+    if not attribution:
+        user = candidate.payload.get("imageinfo", {}).get("user")
+        if user:
+            attribution = user
+
+    return {"license": license_str, "attribution": attribution}

@@ -1,4 +1,4 @@
-from .commons import search_commons
+from .commons import extract_commons_metadata, search_commons
 from .osm import search_osm
 from .pdf import search_pdf
 from .rank import pick_best
@@ -9,6 +9,7 @@ __all__ = [
     "Candidate",
     "Provenance",
     "TrackCanonical",
+    "extract_commons_metadata",
     "search_commons",
     "search_osm",
     "search_pdf",

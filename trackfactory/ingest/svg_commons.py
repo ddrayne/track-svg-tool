@@ -334,20 +334,27 @@ def _select_primary_path(paths: list[dict], viewbox_area: float) -> object | Non
         if has_stroke and not has_fill and stroke_width >= 2.0:
             stroke_candidates.append(info)
     if stroke_candidates:
-        return max(stroke_candidates, key=lambda info: _score_centerline_path(info, viewbox_area))["path"]
-    closed = []
-    for info in paths:
-        path = info["path"]
-        isclosed = getattr(path, "isclosed", None)
-        if not isclosed:
-            continue
+        best = max(stroke_candidates, key=lambda info: _score_centerline_path(info, viewbox_area))
+        path = best["path"]
+        # Validate: must look like a track, not a scale bar or marker
         try:
-            if isclosed():
-                closed.append(info)
-        except AssertionError:
-            continue
-    candidates = closed or paths
-    return max(candidates, key=lambda info: _score_path_info(info, viewbox_area))["path"]
+            xmin, xmax, ymin, ymax = path.bbox()
+            bbox_w, bbox_h = xmax - xmin, ymax - ymin
+            min_dim, max_dim = min(bbox_w, bbox_h), max(bbox_w, bbox_h)
+            segs = len(path)
+            area_ratio = (bbox_w * bbox_h) / viewbox_area if viewbox_area else 0
+            is_plausible = (
+                segs > 3
+                and min_dim > 0
+                and max_dim / min_dim < 10
+                and area_ratio > 0.01
+            )
+        except Exception:
+            is_plausible = False
+        if is_plausible:
+            return path
+    # Fallback: score all paths (closed and unclosed)
+    return max(paths, key=lambda info: _score_path_info(info, viewbox_area))["path"]
 
 
 def _select_centerline_path(paths: list[dict], viewbox_area: float) -> object | None:
