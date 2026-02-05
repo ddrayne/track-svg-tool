@@ -5,10 +5,13 @@ import re
 from pathlib import Path
 import unicodedata
 
+import numpy as np
 import httpx
 from lxml import etree
 from svgpathtools import parse_path
 from svgpathtools import Path as SvgPath
+from svgpathtools.parser import parse_transform
+from svgpathtools.path import transform as apply_svg_transform
 
 from shapely.geometry import LineString, Point
 
@@ -78,13 +81,13 @@ def _merge_style_props(
     classes = (element.get("class") or "").split()
     for class_name in classes:
         props.update(class_styles.get(class_name, {}))
-    inline_style = element.get("style")
-    if inline_style:
-        props.update(_parse_style_props(inline_style))
     for attr in ("stroke", "stroke-width", "fill"):
         value = element.get(attr)
         if value:
             props[attr] = value.strip().lower()
+    inline_style = element.get("style")
+    if inline_style:
+        props.update(_parse_style_props(inline_style))
     return props
 
 
@@ -163,6 +166,27 @@ def svg_mentions_query(svg_bytes: bytes, query: str) -> bool:
     return text_mentions_query(text, query)
 
 
+def _accumulated_transform(element: etree._Element) -> np.ndarray | None:
+    transforms = []
+    current = element
+    while current is not None:
+        tf_str = current.get("transform") if isinstance(current.tag, str) else None
+        if tf_str:
+            transforms.append(parse_transform(tf_str))
+        current = current.getparent()
+    if not transforms:
+        return None
+    transforms.reverse()
+    result = transforms[0]
+    for tf in transforms[1:]:
+        result = result.dot(tf)
+    return result
+
+
+def _apply_transform(path: SvgPath, tf: np.ndarray) -> SvgPath:
+    return apply_svg_transform(path, tf)
+
+
 def _extract_paths(svg_bytes: bytes) -> tuple[list[dict], float]:
     root = etree.fromstring(svg_bytes)
     class_styles: dict[str, dict[str, str]] = {}
@@ -182,7 +206,11 @@ def _extract_paths(svg_bytes: bytes) -> tuple[list[dict], float]:
             if not d:
                 continue
             props = _merge_style_props(element, class_styles)
-            info = {"path": parse_path(d), "props": props, "from_use": False}
+            parsed = parse_path(d)
+            tf = _accumulated_transform(element)
+            if tf is not None:
+                parsed = _apply_transform(parsed, tf)
+            info = {"path": parsed, "props": props, "from_use": False}
             paths.append(info)
             element_id = element.get("id")
             if element_id:
@@ -200,7 +228,11 @@ def _extract_paths(svg_bytes: bytes) -> tuple[list[dict], float]:
                 continue
             props = ref["props"].copy()
             props.update(_merge_style_props(element, class_styles))
-            paths.append({"path": ref["path"], "props": props, "from_use": True})
+            parsed = ref["path"]
+            tf = _accumulated_transform(element)
+            if tf is not None:
+                parsed = _apply_transform(parsed, tf)
+            paths.append({"path": parsed, "props": props, "from_use": True})
     return paths, viewbox_area
 
 
@@ -231,9 +263,9 @@ def _score_path_info(path_info: dict, viewbox_area: float) -> float:
         score *= 1.1
     if not has_stroke and has_fill:
         score *= 0.2
-    if area_ratio < 0.02 and viewbox_area:
+    if area_ratio < 0.01 and viewbox_area:
         score *= 0.1
-    elif area_ratio < 0.01:
+    elif area_ratio < 0.02 and viewbox_area:
         score *= 0.2
     if path_info.get("from_use"):
         score *= 1.15

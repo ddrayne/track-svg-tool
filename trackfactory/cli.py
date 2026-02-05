@@ -58,7 +58,7 @@ def _extract_json_payload(text: str) -> dict | None:
         return json.loads(text)
     except json.JSONDecodeError:
         pass
-    fenced = re.search(r"```json\\s*(\\{.*?\\})\\s*```", text, flags=re.DOTALL)
+    fenced = re.search(r"```json\s*(\{.*?\})\s*```", text, flags=re.DOTALL)
     if fenced:
         try:
             return json.loads(fenced.group(1))
@@ -115,7 +115,7 @@ def _is_track_svg_candidate(title: str, query: str) -> bool:
         "grand prix",
         "prix",
     )
-    tokens = [token for token in re.split(r"\\W+", query.lower()) if token]
+    tokens = [token for token in re.split(r"\W+", query.lower()) if token]
     if tokens and all(token in lowered for token in tokens):
         return True
     return any(term in lowered for term in track_terms)
@@ -436,7 +436,7 @@ def build_variants(query: str, out_slug: str | None = None, verbose: bool = Fals
 def ingest(source: str, type: str = typer.Option(..., "--type"), name: str | None = None, out_slug: str | None = None):
     track_name = name or source
     if type == "wikimedia_svg":
-        canonical = ingest_svg(source, name=track_name)
+        canonical, _svg_bytes = ingest_svg(source, name=track_name)
     elif type == "osm":
         candidates = search_osm(source, limit=1)
         if not candidates:
