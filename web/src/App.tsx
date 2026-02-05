@@ -802,8 +802,10 @@ function App() {
               </div>
             )}
             <div className="zoom-controls">
+              <button onClick={() => { setZoom((z) => Math.max(0.1, z * 0.8)); }}>-</button>
               <span className="zoom-level">{Math.round(zoom * 100)}%</span>
-              {zoom !== 1 && <button onClick={resetZoom}>Reset</button>}
+              <button onClick={() => { setZoom((z) => Math.min(50, z * 1.25)); }}>+</button>
+              <button onClick={resetZoom}>Fit</button>
             </div>
           </div>
           <div
