@@ -1,136 +1,147 @@
-# Track SVG Tool (TrackFactory)
+# TrackFactory
 
-TrackFactory is a Python CLI that discovers, ingests, normalizes, QA checks, and renders track maps as SVGs with a canonical geometry JSON for downstream use. It prefers Wikimedia SVGs when available and falls back to OSM geometry.
+Automated pipeline for extracting, normalizing, and rendering racetrack centerlines from multiple sources.
 
-Primary sources (ranked, when available):
-- Wikimedia Commons SVGs (preferred)
-- OpenStreetMap raceway geometry
-- PDFs (stubbed in v1)
+![TrackFactory Viewer](screenshot.png)
 
-## Features (v1)
-- Search and rank track candidates from Commons and OSM
-- Ingest to a canonical centerline model
-- QA checks (closure error, self-intersection, point count)
-- Render a stylable SVG plus a debug SVG
-- Write a canonical JSON + provenance + sources list
-- Optional LLM-assisted variant selection and naming
+## What it does
 
-## Requirements
-- Python 3.13
-- Node.js 18+ (for the web viewer in `web/`)
-- Windows supported (no OS-specific paths)
+TrackFactory ingests racetrack geometry from several source types and produces a normalized `canonical.json` for each track/config combination:
 
-## Install
-```powershell
-pip install -e .[dev]
+| Source | How it works |
+|--------|-------------|
+| **Wikimedia SVG** | Searches Wikimedia Commons for circuit diagrams, extracts the longest `<path>`, converts to a centerline |
+| **OpenStreetMap** | Queries Overpass for `highway=raceway` ways, merges and projects to UTM |
+| **Raster poster** | Extracts ~94 track outlines from the "Racetracks of the World to Scale" poster via contour detection and Chaikin smoothing |
+
+Each track goes through QA (closure, self-intersection, length sanity) and gets rendered to SVG.
+
+## Quick start
+
+```bash
+pip install -e .
+
+# Ingest a track (search + ingest + QA + render)
+tf build "Spa-Francorchamps"
+
+# Ingest all Wikimedia SVG variants
+tf build-variants "Nurburgring"
+
+# Extract tracks from the poster image
+tf poster-ingest racetracks-poster.jpg --skip-ocr
+
+# Run QA on a track
+tf qa spa-francorchamps
+
+# Render SVGs
+tf render spa-francorchamps
 ```
 
-## Usage
-Search candidates:
-```powershell
-python -m trackfactory.cli search "Nurburgring Nordschleife"
-```
+## CLI commands
 
-Build a track (resolve + ingest + QA + render + write outputs):
-```powershell
-python -m trackfactory.cli build "Nurburgring Nordschleife"
-```
-
-Build all SVG variants (per candidate) into per-variant configs:
-```powershell
-python -m trackfactory.cli build-variants "Nurburgring"
-```
-
-Direct ingest from a local SVG (fixture example):
-```powershell
-python -m trackfactory.cli ingest --type wikimedia_svg --source "<path-to-provided-svg>" --name "Nurburgring Nordschleife"
-```
-
-Re-run QA:
-```powershell
-python -m trackfactory.cli qa nurburgring-nordschleife
-```
-
-Render from canonical:
-```powershell
-python -m trackfactory.cli render nurburgring-nordschleife
-```
-
-Batch from a list file (one query per line):
-```powershell
-python -m trackfactory.cli batch --list top10.txt
-```
-
-Enable verbose logging:
-```powershell
-python -m trackfactory.cli build "Nurburgring Nordschleife" --verbose
-```
-
-## Output Layout
-```
-tracks/
-  <slug>/
-    variants.json        # optional, LLM output
-    llm-raw.json         # optional, raw LLM prompt/response
-    <config>/
-      canonical.json
-      track.svg
-      centerline.svg
-      source_wiki.svg
-      debug.svg
-      sources.json
-```
-
-Notes on outputs:
-- For Wikimedia SVG sources, `track.svg` is the original SVG (high fidelity) and `source_wiki.svg` is the raw download.
-- For non-Wikimedia sources, `track.svg` is rendered from the canonical centerline.
-- `centerline.svg` is always rendered from canonical geometry.
-- `sources.json` is written per config to avoid overwriting variants.
-
-## LLM-assisted variants (optional)
-Set one of these environment variables to enable variant ranking and naming:
-- `TRACKFACTORY_LLM_CMD`
-- `TRACKFACTORY_LLM_CMD_CLAUDE`
-- `TRACKFACTORY_LLM_CMD_CODEX`
-
-Examples:
-```powershell
-setx TRACKFACTORY_LLM_CMD_CLAUDE "claude -p --model opus"
-setx TRACKFACTORY_LLM_CMD_CODEX "codex exec -m gpt-5.2-codex"
-```
-
-The LLM should return JSON:
-```json
-{
-  "ordered_titles": ["File:...Road Course 2024.svg"],
-  "variants": [
-    {
-      "title": "File:...Road Course 2024.svg",
-      "slug": "road-course-2024",
-      "variant_type": "road_course",
-      "year": 2024,
-      "notes": "24-hour layout"
-    }
-  ]
-}
-```
-
-## Tests
-```powershell
-pytest
-```
+| Command | Description |
+|---------|-------------|
+| `tf search <query>` | Search for track sources without ingesting |
+| `tf build <query>` | Search, ingest, QA, and render a single track |
+| `tf build-variants <query>` | Build all Wikimedia SVG variants for a track |
+| `tf ingest <source> <slug>` | Ingest a specific source URL |
+| `tf qa <track-id>` | Run QA checks on an existing track |
+| `tf render <track-id>` | Render centerline + debug SVGs |
+| `tf batch <file>` | Batch-process tracks from a text file |
+| `tf poster-ingest <image>` | Extract tracks from a raster poster image |
 
 ## Web viewer
-The React app in `web/` loads tracks from `tracks/` and can render/inspect canonical geometry and SVGs.
 
-Dev:
-```powershell
+A React + TypeScript viewer for inspecting and editing track outputs.
+
+```bash
 cd web
 npm install
 npm run dev
 ```
 
+Opens at `http://localhost:5173`. Features:
+
+- Auto-loads `canonical.json` when switching tracks/configs
+- Source type badges (OSM, SVG, poster) with metadata display
+- Scroll-wheel zoom (cursor-centered) and drag-to-pan
+- Inline canonical.json editor with live preview
+- Label placement tool for annotating tracks
+- SVG export with custom stroke/fill styling
+- Track intake UI for running CLI builds from the browser
+
+The API server (port 5174) proxies CLI commands and serves track files. It expects `tf` on your PATH. Configure with `TRACKS_ROOT` and `PORT` env vars.
+
+## Project structure
+
+```
+trackfactory/
+  cli.py              # Typer CLI entry point (tf)
+  geom/               # Polyline ops, Chaikin smoothing, QA, shape matching
+  ingest/             # Source ingesters: SVG, OSM, poster raster
+  resolver/           # Source discovery + Pydantic data models
+  store/              # Canonical JSON + SVG file I/O
+  render/             # SVG rendering from centerlines
+web/
+  src/App.tsx          # React viewer SPA
+  server/server.mjs    # Express API proxy for the CLI
+tracks/                # Output directory (gitignored)
+  {track-id}/{config}/
+    canonical.json     # Normalized track data
+    centerline.svg     # Clean centerline render
+    debug.svg          # Debug render with QA overlay
+    source_wiki.svg    # Original Wikimedia SVG (if applicable)
+    sources.json       # Source provenance
+```
+
+## Data model
+
+Each track is stored as a `TrackCanonical` (Pydantic):
+
+```json
+{
+  "track_id": "spa-francorchamps",
+  "name": "Spa-Francorchamps",
+  "config": "default",
+  "centerline": [[x, y], ...],
+  "length_m": 7004.0,
+  "qa": { "is_simple": true, "is_closed": true },
+  "provenance": [{ "source_type": "wikimedia_svg", "url": "..." }]
+}
+```
+
+Centerlines are `[[x, y], ...]` in meters (UTM for OSM, pixel-scaled for SVG/poster). Source types: `wikimedia_svg`, `osm`, `poster`, `pdf`, `other`.
+
+## LLM-assisted variants (optional)
+
+Set an env var to enable LLM-based variant ranking and naming:
+
+```bash
+export TRACKFACTORY_LLM_CMD_CLAUDE="claude -p --model opus"
+```
+
+The LLM ranks Wikimedia SVG candidates and assigns config slugs (e.g. `road-course-2024`, `nordschleife-1967`).
+
+## Requirements
+
+- Python 3.13+
+- Node.js 18+ (for the web viewer)
+
+### Python dependencies
+
+`typer`, `rich`, `httpx`, `pydantic`, `svgpathtools`, `lxml`, `opencv-python-headless`, `numpy`, `shapely`, `pyproj`
+
+Optional: `easyocr` for poster legend OCR (`pip install -e .[ocr]`)
+
+## Tests
+
+```bash
+pip install -e .[dev]
+pytest
+```
+
 ## Notes
-- Wikimedia Commons can return 403 without a proper User-Agent; this tool sets a policy-compliant User-Agent.
-- OSM ingestion uses Overpass and projects to UTM for local planar units.
-- PDFs are stubbed in v1.
+
+- Wikimedia Commons requires a proper User-Agent to avoid 403s; TrackFactory sets a policy-compliant one.
+- OSM ingestion uses Overpass API and projects coordinates to UTM for planar geometry.
+- The poster ingest module uses Chaikin corner-cutting to smooth pixel-level contour jaggedness.
