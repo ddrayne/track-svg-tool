@@ -1,8 +1,22 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 
+type ProvenanceEntry = {
+  source_type?: string
+  url?: string
+  license?: string
+  attribution?: string
+  notes?: string
+}
+
 type Canonical = {
+  track_id?: string
+  name?: string
+  config?: string
   centerline?: number[][]
+  length_m?: number
+  qa?: Record<string, unknown>
+  provenance?: ProvenanceEntry[]
 }
 
 type Label = {
@@ -35,6 +49,20 @@ const DEFAULT_STYLE: StyleSettings = {
 const DEFAULT_TRACK_ID = 'daytona-international-speedway'
 const DEFAULT_CONFIG = 'default'
 
+const SOURCE_BADGE_COLORS: Record<string, string> = {
+  osm: '#2ea043',
+  wikimedia_svg: '#3b82f6',
+  poster: '#d97706',
+  pdf: '#8b5cf6',
+  other: '#6b7280',
+}
+
+function getSourceType(canonical: Canonical | null): string {
+  const prov = canonical?.provenance
+  if (!prov || prov.length === 0) return ''
+  return prov[0].source_type ?? ''
+}
+
 function App() {
   const [trackId, setTrackId] = useState(DEFAULT_TRACK_ID)
   const [config, setConfig] = useState(DEFAULT_CONFIG)
@@ -62,6 +90,18 @@ function App() {
   const [trackOptions, setTrackOptions] = useState<string[]>([])
   const [configOptions, setConfigOptions] = useState<string[]>([])
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const [zoom, setZoom] = useState(1)
+  const [panX, setPanX] = useState(0)
+  const [panY, setPanY] = useState(0)
+  const dragRef = useRef<{ x: number; y: number; px: number; py: number; moved: boolean } | null>(null)
+  const wasDraggingRef = useRef(false)
+  const zoomRef = useRef(1)
+  const panXRef = useRef(0)
+  const panYRef = useRef(0)
+  zoomRef.current = zoom
+  panXRef.current = panX
+  panYRef.current = panY
 
   const basePath = useMemo(() => {
     const trimmed = baseUrl.trim()
@@ -291,6 +331,10 @@ function App() {
   }
 
   const onCanvasClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    if (wasDraggingRef.current) {
+      wasDraggingRef.current = false
+      return
+    }
     if (!labelMode || mode !== 'canonical') return
     if (!svgRef.current) return
     const rect = svgRef.current.getBoundingClientRect()
@@ -302,6 +346,28 @@ function App() {
     const text = labelText.trim() || `${labels.length + 1}`
     setLabels((prev) => [...prev, { id: `${Date.now()}`, x, y, text }])
   }
+
+  const onCanvasPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0 && e.button !== 1) return
+    dragRef.current = { x: e.clientX, y: e.clientY, px: panX, py: panY, moved: false }
+    canvasRef.current?.setPointerCapture(e.pointerId)
+  }
+
+  const onCanvasPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragRef.current) return
+    const dx = e.clientX - dragRef.current.x
+    const dy = e.clientY - dragRef.current.y
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragRef.current.moved = true
+    setPanX(dragRef.current.px + dx)
+    setPanY(dragRef.current.py + dy)
+  }
+
+  const onCanvasPointerUp = () => {
+    if (dragRef.current?.moved) wasDraggingRef.current = true
+    dragRef.current = null
+  }
+
+  const resetZoom = () => { setZoom(1); setPanX(0); setPanY(0) }
 
   const callApi = async (path: string, body?: Record<string, unknown>): Promise<any> => {
     const resp = await fetch(`${apiPath}${path}`, {
@@ -434,13 +500,64 @@ function App() {
   }, [useApiFiles])
 
   useEffect(() => {
-    loadCanonicalFromPath()
     refreshTracks()
   }, [])
 
   useEffect(() => {
     refreshConfigs(trackId)
   }, [trackId])
+
+  // Wheel zoom — needs non-passive listener for preventDefault
+  useEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    const handler = (e: WheelEvent) => {
+      e.preventDefault()
+      const factor = e.deltaY > 0 ? 0.9 : 1.1
+      const cur = zoomRef.current
+      const next = Math.max(0.1, Math.min(50, cur * factor))
+      const rect = el.getBoundingClientRect()
+      const mx = e.clientX - rect.left
+      const my = e.clientY - rect.top
+      const cx = (mx - panXRef.current) / cur
+      const cy = (my - panYRef.current) / cur
+      setPanX(mx - cx * next)
+      setPanY(my - cy * next)
+      setZoom(next)
+    }
+    el.addEventListener('wheel', handler, { passive: false })
+    return () => el.removeEventListener('wheel', handler)
+  }, [])
+
+  // Reset zoom/pan when track or config changes
+  useEffect(() => {
+    setZoom(1)
+    setPanX(0)
+    setPanY(0)
+  }, [trackId, config])
+
+  // Auto-load canonical.json + outputs when track or config changes
+  useEffect(() => {
+    if (!trackId || !config) return
+    loadCanonicalFromPath()
+    refreshOutputs()
+  }, [trackId, config])
+
+  // Auto-detect best SVG filename from outputs
+  useEffect(() => {
+    if (outputs.length === 0) return
+    const names = outputs.map((f) => f.name.toLowerCase())
+    if (names.includes('source_wiki.svg')) {
+      setSvgFileName('source_wiki.svg')
+    } else if (names.includes('centerline.svg')) {
+      setSvgFileName('centerline.svg')
+    } else if (names.includes('track.svg')) {
+      setSvgFileName('track.svg')
+    } else {
+      const anySvg = outputs.find((f) => f.name.toLowerCase().endsWith('.svg'))
+      if (anySvg) setSvgFileName(anySvg.name)
+    }
+  }, [outputs])
 
   return (
     <div className="app">
@@ -652,43 +769,83 @@ function App() {
         </aside>
 
         <section className="viewer">
-          <div className="viewer__tabs">
-            <button className={mode === 'canonical' ? 'active' : ''} onClick={() => setMode('canonical')}>
-              Canonical
-            </button>
-            <button className={mode === 'svg' ? 'active' : ''} onClick={() => setMode('svg')}>
-              Source SVG
-            </button>
-          </div>
-          <div className="viewer__canvas">
-            {mode === 'canonical' ? (
-              <svg ref={svgRef} viewBox={viewBox} onClick={onCanvasClick}>
-                {pathD && (
-                  <path
-                    d={pathD}
-                    fill={style.fill}
-                    stroke={style.stroke}
-                    strokeWidth={style.strokeWidth}
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                  />
+          <div className="viewer__toolbar">
+            <div className="viewer__tabs">
+              <button className={mode === 'canonical' ? 'active' : ''} onClick={() => setMode('canonical')}>
+                Canonical
+              </button>
+              <button className={mode === 'svg' ? 'active' : ''} onClick={() => setMode('svg')}>
+                Source SVG
+              </button>
+            </div>
+            {canonical && (
+              <div className="track-meta">
+                {(() => {
+                  const src = getSourceType(canonical)
+                  return src ? (
+                    <span
+                      className="source-badge"
+                      style={{ background: SOURCE_BADGE_COLORS[src] ?? SOURCE_BADGE_COLORS.other }}
+                    >
+                      {src.replace('_', ' ')}
+                    </span>
+                  ) : null
+                })()}
+                {canonical.name && <span className="track-name">{canonical.name}</span>}
+                {canonical.length_m != null && (
+                  <span className="track-length">
+                    {canonical.length_m >= 1000
+                      ? `${(canonical.length_m / 1000).toFixed(2)} km`
+                      : `${Math.round(canonical.length_m)} m`}
+                  </span>
                 )}
-                {labels.map((label) => (
-                  <text
-                    key={label.id}
-                    x={label.x}
-                    y={label.y}
-                    fontSize={style.labelSize}
-                    textAnchor="middle"
-                    fill={style.stroke}
-                  >
-                    {label.text}
-                  </text>
-                ))}
-              </svg>
-            ) : (
-              <div className="viewer__svg" dangerouslySetInnerHTML={{ __html: svgSource || '<p>no svg loaded</p>' }} />
+              </div>
             )}
+            <div className="zoom-controls">
+              <span className="zoom-level">{Math.round(zoom * 100)}%</span>
+              {zoom !== 1 && <button onClick={resetZoom}>Reset</button>}
+            </div>
+          </div>
+          <div
+            className="viewer__canvas"
+            ref={canvasRef}
+            onPointerDown={onCanvasPointerDown}
+            onPointerMove={onCanvasPointerMove}
+            onPointerUp={onCanvasPointerUp}
+          >
+            <div
+              className="viewer__canvas-content"
+              style={{ transform: `translate(${panX}px, ${panY}px) scale(${zoom})`, transformOrigin: '0 0' }}
+            >
+              {mode === 'canonical' ? (
+                <svg ref={svgRef} viewBox={viewBox} onClick={onCanvasClick}>
+                  {pathD && (
+                    <path
+                      d={pathD}
+                      fill={style.fill}
+                      stroke={style.stroke}
+                      strokeWidth={style.strokeWidth}
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                    />
+                  )}
+                  {labels.map((label) => (
+                    <text
+                      key={label.id}
+                      x={label.x}
+                      y={label.y}
+                      fontSize={style.labelSize}
+                      textAnchor="middle"
+                      fill={style.stroke}
+                    >
+                      {label.text}
+                    </text>
+                  ))}
+                </svg>
+              ) : (
+                <div className="viewer__svg" dangerouslySetInnerHTML={{ __html: svgSource || '<p>no svg loaded</p>' }} />
+              )}
+            </div>
           </div>
           <div className="viewer__split">
             <div className="viewer__editor">

@@ -14,6 +14,7 @@ from trackfactory.geom import run_qa, shape_similarity
 from trackfactory.ingest import (
     extract_outline_svg,
     ingest_osm_payload,
+    ingest_poster,
     ingest_svg,
     svg_mentions_query,
     text_mentions_query,
@@ -335,7 +336,7 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
     # Track the first SVG that passes basic checks (name/ingest) but fails
     # OSM cross-check — used as fallback when OSM may represent a different
     # track configuration (e.g. oval vs road course).
-    svg_fallback: tuple[TrackCanonical, Candidate, bytes | None] | None = None
+    svg_fallback: tuple[TrackCanonical, Candidate, bytes | None, dict] | None = None
     for candidate in ordered_candidates:
         try:
             if candidate.source_type == "wikimedia_svg":
@@ -354,8 +355,8 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
                             f"cov={match['coverage']:.3f} similar={match['is_similar']}"
                         )
                     if not match["is_similar"]:
-                        if svg_fallback is None:
-                            svg_fallback = (canonical, candidate, source_svg)
+                        if svg_fallback is None or match["coverage"] > svg_fallback[3].get("coverage", 0):
+                            svg_fallback = (canonical, candidate, source_svg, match)
                         raise ValueError(
                             f"SVG shape does not match OSM reference "
                             f"(hausdorff={match['hausdorff']:.3f})"
@@ -384,13 +385,21 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
     # compare quality: prefer the SVG if it's a plausible closed track
     # (OSM may have merged multiple track configurations).
     if chosen is not None and chosen.source_type == "osm" and svg_fallback is not None:
-        fb_canonical, fb_candidate, fb_svg = svg_fallback
+        fb_canonical, fb_candidate, fb_svg, fb_match = svg_fallback
         fb_centerline = [(p[0], p[1]) for p in fb_canonical.centerline]
         from trackfactory.geom import is_simple
-        if fb_centerline and fb_centerline[0] == fb_centerline[-1] and is_simple(fb_centerline):
+        # Only prefer SVG fallback if it has decent coverage (>60%), suggesting
+        # a multi-config venue (Daytona) rather than a genuinely wrong SVG.
+        if (
+            fb_centerline
+            and fb_centerline[0] == fb_centerline[-1]
+            and is_simple(fb_centerline)
+            and fb_match.get("coverage", 0) > 0.60
+        ):
             if verbose:
                 console.print(
-                    f"[yellow]OSM chosen but SVG fallback is a valid closed loop; "
+                    f"[yellow]OSM chosen but SVG fallback is a valid closed loop "
+                    f"(cov={fb_match['coverage']:.3f}); "
                     f"preferring SVG: {fb_candidate.title}[/yellow]"
                 )
             canonical = fb_canonical
@@ -585,6 +594,121 @@ def batch(list: str = typer.Option(..., "--list")):
         console.print(f"[red]Batch completed with {failures} failures[/red]")
         raise typer.Exit(code=1)
     console.print("[green]Batch completed successfully[/green]")
+
+
+@app.command()
+def poster_ingest(
+    image: str,
+    config: str = "poster",
+    verbose: bool = False,
+    dry_run: bool = False,
+    skip_ocr: bool = False,
+):
+    """Extract track centerlines from a racetrack poster image.
+
+    Processes the "Racetracks of the World to Scale" poster to extract
+    ~100 individual track contours, calibrate scale via the Nurburgring,
+    and optionally OCR track names from the legend and labels.
+    """
+    from trackfactory.ingest.poster_raster import (
+        calibrate_scale,
+        find_track_contours,
+        load_and_threshold,
+        matched_to_canonical,
+    )
+
+    path = Path(image)
+    if not path.exists():
+        console.print(f"[red]Image not found: {image}[/red]")
+        raise typer.Exit(code=2)
+
+    # Optionally load existing tracks for shape matching
+    existing_tracks: dict[str, list[tuple[float, float]]] = {}
+    from trackfactory.store.tracks import tracks_root
+    tracks_dir = tracks_root()
+    if tracks_dir.exists():
+        for canonical_path in tracks_dir.glob("*/*/canonical.json"):
+            try:
+                data = json.loads(canonical_path.read_text(encoding="utf-8"))
+                cl = [(p[0], p[1]) for p in data.get("centerline", [])]
+                if cl:
+                    existing_tracks[data.get("track_id", canonical_path.parent.parent.name)] = cl
+            except Exception:
+                continue
+
+    if verbose:
+        console.print(f"[blue]Loaded {len(existing_tracks)} existing tracks for shape matching[/blue]")
+
+    matched = ingest_poster(
+        str(path),
+        verbose=verbose,
+        skip_ocr=skip_ocr,
+        existing_tracks=existing_tracks if existing_tracks else None,
+    )
+
+    if not matched:
+        console.print("[red]No tracks extracted from poster[/red]")
+        raise typer.Exit(code=3)
+
+    # Compute scale for canonical conversion
+    _, binary = load_and_threshold(str(path))
+    contours = find_track_contours(binary)
+    meters_per_pixel = calibrate_scale(contours)
+
+    # Summary table
+    table = Table(title=f"Poster Extraction: {len(matched)} tracks")
+    table.add_column("#", justify="right")
+    table.add_column("Name")
+    table.add_column("Length (m)", justify="right")
+    table.add_column("Confidence", justify="right")
+    table.add_column("Source")
+    for idx, mt in enumerate(matched):
+        table.add_row(
+            str(idx),
+            mt.name or "[dim]unnamed[/dim]",
+            f"{mt.length_m:.0f}",
+            f"{mt.confidence:.2f}",
+            mt.match_source,
+        )
+    console.print(table)
+
+    if dry_run:
+        console.print("[yellow]Dry run — no files written[/yellow]")
+        return
+
+    # Write output files
+    written = 0
+    for mt in matched:
+        if not mt.name:
+            continue
+        canonical = matched_to_canonical(mt, meters_per_pixel, str(path), config=config)
+        if not canonical.track_id:
+            continue
+
+        track_id = canonical.track_id
+        centerline = [(p[0], p[1]) for p in canonical.centerline]
+
+        svg_text = render_wikipedia_svg(centerline)
+        debug_svg = render_debug_svg(centerline)
+
+        write_canonical(track_id, config, canonical.model_dump())
+        write_svg(track_id, config, "track.svg", svg_text)
+        write_svg(track_id, config, "centerline.svg", svg_text)
+        write_svg(track_id, config, "debug.svg", debug_svg)
+        write_sources(
+            track_id,
+            {
+                "source": "poster",
+                "image": str(path.resolve()),
+                "confidence": mt.confidence,
+                "match_source": mt.match_source,
+                "length_m": mt.length_m,
+            },
+            config=config,
+        )
+        written += 1
+
+    console.print(f"[green]Wrote {written} tracks from poster[/green]")
 
 
 if __name__ == "__main__":

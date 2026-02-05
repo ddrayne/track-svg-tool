@@ -13,10 +13,12 @@ dependencies = [
   "pyproj>=3.6.1",
   "svgpathtools>=1.6.1",
   "lxml>=5.2.2",
+  "opencv-python-headless>=4.8.0",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.2.0"]
+ocr = ["easyocr>=1.7.0"]
 
 [project.scripts]
 tf = "trackfactory.cli:app"

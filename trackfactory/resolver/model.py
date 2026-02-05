@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class Provenance(BaseModel):
-    source_type: Literal["wikimedia_svg", "osm", "pdf", "other"]
+    source_type: Literal["wikimedia_svg", "osm", "pdf", "poster", "other"]
     url: str
     license: str | None = None
     attribution: str | None = None
@@ -16,7 +16,7 @@ class Provenance(BaseModel):
 
 
 class Candidate(BaseModel):
-    source_type: Literal["wikimedia_svg", "osm", "pdf"]
+    source_type: Literal["wikimedia_svg", "osm", "pdf", "poster"]
     title: str
     url: str
     score: float

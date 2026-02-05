@@ -174,6 +174,7 @@ def _select_best_way(payload: dict, query: str) -> list[tuple[float, float]]:
     closed_candidates: list[list[tuple[float, float]]] = []
     open_candidates: list[list[tuple[float, float]]] = []
     all_ways: list[list[tuple[float, float]]] = []
+    all_ways_tags: dict[str, str] = {"name": query}
     scored_candidates: list[tuple[tuple[float, int, float], list[tuple[float, float]]]] = []
     for el in elements:
         if el.get("type") != "way":
@@ -186,6 +187,9 @@ def _select_best_way(payload: dict, query: str) -> list[tuple[float, float]]:
             continue
         all_ways.append(coords)
         scored_candidates.append((_score_candidate(tags, query, coords), coords))
+        for k in ("highway", "leisure", "route", "type", "sport"):
+            if k in tags and k not in all_ways_tags:
+                all_ways_tags[k] = tags[k]
         if coords[0] == coords[-1]:
             closed_candidates.append(coords)
         else:
@@ -213,7 +217,11 @@ def _select_best_way(payload: dict, query: str) -> list[tuple[float, float]]:
             scored_candidates.append((_score_candidate(tags, query, merged), merged))
     merged = _merge_way_segments(all_ways)
     if merged:
-        scored_candidates.append((_score_candidate({"name": query}, query, merged), merged))
+        merged_score = _score_candidate(all_ways_tags, query, merged)
+        # Closed merge of all ways is likely the full circuit — boost it
+        if merged[0] == merged[-1] and len(all_ways) > 1:
+            merged_score = (merged_score[0] + 3.0, merged_score[1], merged_score[2])
+        scored_candidates.append((merged_score, merged))
     if scored_candidates:
         return max(scored_candidates, key=lambda item: item[0])[1]
     if closed_candidates:

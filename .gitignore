@@ -9,3 +9,5 @@ __pycache__/
 trackfactory.egg-info/
 tracks/
 .cache/
+.claude/
+=4.8.0

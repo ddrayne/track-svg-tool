@@ -137,17 +137,73 @@ button:hover {
   color: var(--accent);
 }
 
+.viewer__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.track-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.source-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.track-name {
+  color: var(--fg);
+}
+
+.track-length {
+  color: var(--muted);
+}
+
 .viewer__canvas {
   border: 1px solid var(--border);
   background: var(--canvas);
-  display: flex;
-  align-items: stretch;
-  justify-content: stretch;
+  overflow: hidden;
+  cursor: grab;
+  position: relative;
+}
+
+.viewer__canvas:active {
+  cursor: grabbing;
+}
+
+.viewer__canvas-content {
+  width: 100%;
+  height: 100%;
 }
 
 .viewer__canvas svg {
   width: 100%;
   height: 100%;
+  display: block;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.zoom-level {
+  min-width: 36px;
+  text-align: right;
 }
 
 .viewer__svg {
