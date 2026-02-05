@@ -21,8 +21,11 @@ def run_llm(prompt: str) -> str | None:
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as handle:
             handle.write(prompt)
             prompt_path = handle.name
-        command = cmd.replace("{prompt_file}", prompt_path)
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        try:
+            command = cmd.replace("{prompt_file}", prompt_path)
+            result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        finally:
+            os.unlink(prompt_path)
     else:
         result = subprocess.run(cmd, shell=True, input=prompt, capture_output=True, text=True)
     if result.returncode != 0:

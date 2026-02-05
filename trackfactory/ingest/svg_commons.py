@@ -10,6 +10,8 @@ from lxml import etree
 from svgpathtools import parse_path
 from svgpathtools import Path as SvgPath
 
+from shapely.geometry import LineString, Point
+
 from trackfactory.geom import close_loop, length as line_length, resample_closed
 from trackfactory.resolver.model import Provenance, TrackCanonical
 from trackfactory.store.provenance import now_utc_iso

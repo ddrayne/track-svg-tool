@@ -11,7 +11,7 @@ def test_svg_ingest_selects_longest_path(tmp_path: Path):
     svg_path = tmp_path / "test.svg"
     svg_path.write_text(svg_content, encoding="utf-8")
 
-    canonical = ingest_svg(str(svg_path), name="Test Track")
+    canonical, _svg_bytes = ingest_svg(str(svg_path), name="Test Track")
     assert canonical.centerline
     assert canonical.length_m is not None
     assert canonical.length_m > 100.0

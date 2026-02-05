@@ -25,5 +25,6 @@ tf = "trackfactory.cli:app"
 requires = ["setuptools>=70.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["trackfactory"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["trackfactory*"]
