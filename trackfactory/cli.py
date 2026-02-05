@@ -332,6 +332,10 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
     if verbose and osm_reference:
         console.print(f"[blue]OSM reference[/blue]: {len(osm_reference)} points")
     source_svg = None
+    # Track the first SVG that passes basic checks (name/ingest) but fails
+    # OSM cross-check — used as fallback when OSM may represent a different
+    # track configuration (e.g. oval vs road course).
+    svg_fallback: tuple[TrackCanonical, Candidate, bytes | None] | None = None
     for candidate in ordered_candidates:
         try:
             if candidate.source_type == "wikimedia_svg":
@@ -346,9 +350,12 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
                     if verbose:
                         console.print(
                             f"[blue]OSM cross-check[/blue]: hausdorff={match['hausdorff']:.3f} "
-                            f"ar_diff={match['aspect_ratio_diff']:.3f} similar={match['is_similar']}"
+                            f"ar_diff={match['aspect_ratio_diff']:.3f} "
+                            f"cov={match['coverage']:.3f} similar={match['is_similar']}"
                         )
                     if not match["is_similar"]:
+                        if svg_fallback is None:
+                            svg_fallback = (canonical, candidate, source_svg)
                         raise ValueError(
                             f"SVG shape does not match OSM reference "
                             f"(hausdorff={match['hausdorff']:.3f})"
@@ -372,6 +379,23 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
                     f"[green]Chosen[/green]: {candidate.source_type} {candidate.title}"
                 )
             break
+
+    # If we fell through to OSM but have an SVG that passed basic checks,
+    # compare quality: prefer the SVG if it's a plausible closed track
+    # (OSM may have merged multiple track configurations).
+    if chosen is not None and chosen.source_type == "osm" and svg_fallback is not None:
+        fb_canonical, fb_candidate, fb_svg = svg_fallback
+        fb_centerline = [(p[0], p[1]) for p in fb_canonical.centerline]
+        from trackfactory.geom import is_simple
+        if fb_centerline and fb_centerline[0] == fb_centerline[-1] and is_simple(fb_centerline):
+            if verbose:
+                console.print(
+                    f"[yellow]OSM chosen but SVG fallback is a valid closed loop; "
+                    f"preferring SVG: {fb_candidate.title}[/yellow]"
+                )
+            canonical = fb_canonical
+            chosen = fb_candidate
+            source_svg = fb_svg
 
     if canonical is None or chosen is None:
         console.print("[red]No candidates succeeded[/red]")
