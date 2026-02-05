@@ -58,50 +58,112 @@ def _coords_for_way(way: dict, nodes: dict[int, tuple[float, float]]) -> list[tu
     return [nodes[n] for n in node_ids if n in nodes]
 
 
-def _merge_way_segments(ways: list[list[tuple[float, float]]]) -> list[tuple[float, float]]:
+def _merge_way_segments(
+    ways: list[list[tuple[float, float]]],
+    max_gap: float = 0.0015,
+) -> list[tuple[float, float]]:
+    """Merge way segments into a single polyline.
+
+    First builds connected clusters via exact endpoint matching, then bridges
+    between clusters using proximity within *max_gap* degrees (~167 m).
+    Tries multiple seeds (one per cluster) and returns the longest result.
+    """
     if not ways:
         return []
     ways = [w for w in ways if len(w) >= 2]
     if not ways:
         return []
-    lengths = [_rough_length(w) for w in ways]
-    current = list(ways[lengths.index(max(lengths))])
-    used = {lengths.index(max(lengths))}
 
     def key(pt: tuple[float, float]) -> tuple[float, float]:
         return (round(pt[0], 6), round(pt[1], 6))
 
-    while True:
-        extended = False
-        start_key = key(current[0])
-        end_key = key(current[-1])
-        for idx, coords in enumerate(ways):
-            if idx in used:
+    def _extend_exact(current: list, used: set) -> list:
+        """Greedily extend *current* chain by exact endpoint matching."""
+        while True:
+            extended = False
+            start_key = key(current[0])
+            end_key = key(current[-1])
+            for idx, coords in enumerate(ways):
+                if idx in used:
+                    continue
+                c_start = key(coords[0])
+                c_end = key(coords[-1])
+                if c_start == end_key:
+                    current.extend(coords[1:])
+                    used.add(idx)
+                    extended = True
+                    break
+                if c_end == end_key:
+                    current.extend(list(reversed(coords[:-1])))
+                    used.add(idx)
+                    extended = True
+                    break
+                if c_end == start_key:
+                    current = coords[:-1] + current
+                    used.add(idx)
+                    extended = True
+                    break
+                if c_start == start_key:
+                    current = list(reversed(coords[1:])) + current
+                    used.add(idx)
+                    extended = True
+                    break
+            if not extended:
+                break
+        return current
+
+    # Phase 1: build clusters via exact matching from each unused way
+    clusters: list[tuple[list, set]] = []
+    globally_used: set[int] = set()
+    for seed_idx in range(len(ways)):
+        if seed_idx in globally_used:
+            continue
+        used: set[int] = {seed_idx}
+        chain = _extend_exact(list(ways[seed_idx]), used)
+        clusters.append((chain, used))
+        globally_used |= used
+
+    # Sort clusters longest-first so the main circuit is the base chain
+    clusters.sort(key=lambda c: _rough_length(c[0]), reverse=True)
+
+    # Phase 2: greedily bridge clusters by proximity
+    current = clusters[0][0]
+    merged_ids: set[int] = set(clusters[0][1])
+
+    def _nearest_cluster_endpoint(
+        target: tuple[float, float],
+    ) -> tuple[int, str, float]:
+        best_ci, best_end, best_dist = -1, "start", float("inf")
+        for ci, (chain, ids) in enumerate(clusters):
+            if ids & merged_ids:
                 continue
-            c_start = key(coords[0])
-            c_end = key(coords[-1])
-            if c_start == end_key:
-                current.extend(coords[1:])
-                used.add(idx)
-                extended = True
-                break
-            if c_end == end_key:
-                current.extend(list(reversed(coords[:-1])))
-                used.add(idx)
-                extended = True
-                break
-            if c_end == start_key:
-                current = coords[:-1] + current
-                used.add(idx)
-                extended = True
-                break
-            if c_start == start_key:
-                current = list(reversed(coords[1:])) + current
-                used.add(idx)
-                extended = True
-                break
-        if not extended:
+            for end_label, pt in (("start", chain[0]), ("end", chain[-1])):
+                d = math.hypot(target[0] - pt[0], target[1] - pt[1])
+                if d < best_dist:
+                    best_ci, best_end, best_dist = ci, end_label, d
+        return best_ci, best_end, best_dist
+
+    while True:
+        end_ci, end_end, end_dist = _nearest_cluster_endpoint(current[-1])
+        start_ci, start_end, start_dist = _nearest_cluster_endpoint(current[0])
+
+        if end_dist <= max_gap and end_dist <= start_dist:
+            chain = clusters[end_ci][0]
+            if end_end == "start":
+                current.extend(chain)
+            else:
+                current.extend(list(reversed(chain)))
+            merged_ids |= clusters[end_ci][1]
+        elif start_dist <= max_gap:
+            chain = clusters[start_ci][0]
+            if start_end == "end":
+                current = chain + current
+            else:
+                current = list(reversed(chain)) + current
+            merged_ids |= clusters[start_ci][1]
+        else:
             break
+
     return current
 
 

@@ -10,7 +10,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from trackfactory.geom import run_qa
+from trackfactory.geom import run_qa, shape_similarity
 from trackfactory.ingest import (
     extract_outline_svg,
     ingest_osm_payload,
@@ -19,7 +19,7 @@ from trackfactory.ingest import (
     text_mentions_query,
 )
 from trackfactory.render import render_debug_svg, render_wikipedia_svg
-from trackfactory.resolver import search_commons, search_osm, search_wikipedia
+from trackfactory.resolver import extract_commons_metadata, search_commons, search_osm, search_wikipedia
 from trackfactory.resolver.model import Candidate, TrackCanonical
 from trackfactory.llm import run_llm
 from trackfactory.store.tracks import slugify, track_config_dir, write_canonical, write_sources, write_svg
@@ -51,6 +51,22 @@ def _apply_track_id(canonical: TrackCanonical, track_id: str) -> TrackCanonical:
     data = canonical.model_dump()
     data["track_id"] = track_id
     return TrackCanonical(**data)
+
+
+def _extract_osm_reference(candidates: list[Candidate], query: str) -> list[tuple[float, float]] | None:
+    """Eagerly extract an OSM reference centerline from already-fetched candidates."""
+    for candidate in candidates:
+        if candidate.source_type != "osm":
+            continue
+        payload = candidate.payload.get("overpass")
+        if not payload:
+            continue
+        try:
+            canonical = ingest_osm_payload(payload, name=query)
+            return [(p[0], p[1]) for p in canonical.centerline]
+        except Exception:
+            continue
+    return None
 
 
 def _extract_json_payload(text: str) -> dict | None:
@@ -201,10 +217,14 @@ def _finalize_build(
     chosen: Candidate,
     candidates: list[Candidate],
     source_svg: str | None = None,
+    osm_reference: list[tuple[float, float]] | None = None,
 ) -> list[str]:
     canonical = _apply_track_id(canonical, track_id)
     centerline = [(p[0], p[1]) for p in canonical.centerline]
     qa, failures = run_qa(centerline)
+    if osm_reference is not None:
+        match = shape_similarity(centerline, osm_reference)
+        qa["osm_cross_check"] = match
     canonical.qa = qa
 
     svg_text = render_wikipedia_svg(centerline)
@@ -308,6 +328,9 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
             "[blue]Ordered candidates[/blue]: "
             + ", ".join([f"{c.source_type}:{c.title}" for c in ordered_candidates])
         )
+    osm_reference = _extract_osm_reference(candidates, query)
+    if verbose and osm_reference:
+        console.print(f"[blue]OSM reference[/blue]: {len(osm_reference)} points")
     source_svg = None
     for candidate in ordered_candidates:
         try:
@@ -317,6 +340,19 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
                     candidate.title or "", query
                 ):
                     raise ValueError("SVG content does not mention track name")
+                if osm_reference is not None:
+                    svg_centerline = [(p[0], p[1]) for p in canonical.centerline]
+                    match = shape_similarity(svg_centerline, osm_reference)
+                    if verbose:
+                        console.print(
+                            f"[blue]OSM cross-check[/blue]: hausdorff={match['hausdorff']:.3f} "
+                            f"ar_diff={match['aspect_ratio_diff']:.3f} similar={match['is_similar']}"
+                        )
+                    if not match["is_similar"]:
+                        raise ValueError(
+                            f"SVG shape does not match OSM reference "
+                            f"(hausdorff={match['hausdorff']:.3f})"
+                        )
             elif candidate.source_type == "osm":
                 payload = candidate.payload.get("overpass")
                 if not payload:
@@ -341,6 +377,11 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
         console.print("[red]No candidates succeeded[/red]")
         raise typer.Exit(code=3)
 
+    if chosen.source_type == "wikimedia_svg" and canonical.provenance:
+        meta = extract_commons_metadata(chosen)
+        canonical.provenance[0].license = meta.get("license")
+        canonical.provenance[0].attribution = meta.get("attribution")
+
     track_id = slugify(out_slug or query)
     source_svg_text = source_svg.decode("utf-8", errors="ignore") if source_svg else None
     failures = _finalize_build(
@@ -351,6 +392,7 @@ def build(query: str, out_slug: str | None = None, config: str = "default", verb
         chosen,
         candidates,
         source_svg=source_svg_text,
+        osm_reference=osm_reference,
     )
     if chosen.source_type == "wikimedia_svg" and source_svg_text:
         write_svg(track_id, config, "source_wiki.svg", source_svg_text)
@@ -415,6 +457,10 @@ def build_variants(query: str, out_slug: str | None = None, verbose: bool = Fals
             console.print(f"[yellow]Variant failed ({candidate.title}): {exc}[/yellow]")
             failures += 1
             continue
+        if candidate.source_type == "wikimedia_svg" and canonical.provenance:
+            meta = extract_commons_metadata(candidate)
+            canonical.provenance[0].license = meta.get("license")
+            canonical.provenance[0].attribution = meta.get("attribution")
         source_svg_text = source_svg.decode("utf-8", errors="ignore") if source_svg else None
         _finalize_build(
             canonical,

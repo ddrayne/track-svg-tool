@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import re
+from pathlib import Path
 
 import httpx
 
@@ -9,6 +12,31 @@ from .model import Candidate
 
 OVERPASS_API = "https://overpass-api.de/api/interpreter"
 NOMINATIM_API = "https://nominatim.openstreetmap.org/search"
+
+_CACHE_DIR = Path(__file__).resolve().parents[2] / ".cache" / "osm"
+
+
+def _cache_key(query_text: str) -> str:
+    return hashlib.sha256(query_text.encode()).hexdigest()[:16]
+
+
+def _read_cache(query_text: str) -> dict | None:
+    path = _CACHE_DIR / f"{_cache_key(query_text)}.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return None
+    return None
+
+
+def _write_cache(query_text: str, payload: dict) -> None:
+    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    path = _CACHE_DIR / f"{_cache_key(query_text)}.json"
+    try:
+        path.write_text(json.dumps(payload), encoding="utf-8")
+    except OSError:
+        pass
 
 
 def _build_overpass_query(query: str) -> str:
@@ -127,12 +155,15 @@ def search_osm(query: str, limit: int = 5) -> list[Candidate]:
             queries.append(("bbox", _build_overpass_bbox_query(bbox), 0.08))
 
         for kind, overpass_query, bonus in queries:
-            try:
-                resp = client.post(OVERPASS_API, data=overpass_query)
-                resp.raise_for_status()
-            except httpx.HTTPError:
-                continue
-            payload = resp.json()
+            payload = _read_cache(overpass_query)
+            if payload is None:
+                try:
+                    resp = client.post(OVERPASS_API, data=overpass_query)
+                    resp.raise_for_status()
+                except httpx.HTTPError:
+                    continue
+                payload = resp.json()
+                _write_cache(overpass_query, payload)
             score = min(_score_overpass_json(payload, query) + bonus, 1.0)
             candidates.append(
                 Candidate(
