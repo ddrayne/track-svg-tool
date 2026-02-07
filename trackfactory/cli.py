@@ -679,7 +679,7 @@ def poster_ingest(
     # Write output files
     written = 0
     for mt in matched:
-        if not mt.name:
+        if not mt.centerline:
             continue
         canonical = matched_to_canonical(mt, meters_per_pixel, str(path), config=config)
         if not canonical.track_id:

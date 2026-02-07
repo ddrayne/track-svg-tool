@@ -39,6 +39,15 @@ NURBURGRING_LENGTH_M = 20_832.0
 # Minimum contour area in pixels to be considered a track (filters noise).
 MIN_CONTOUR_AREA_PX = 1000
 
+# Maximum contour area in pixels — filters region-group contours that are
+# larger than any real track but smaller than the Nurburgring universe.
+# Real tracks range ~1,600–43,000 px²; spurious regions are 100K+ px².
+MAX_CONTOUR_AREA_PX = 100_000
+
+# Maximum plausible track length in meters — catches contours with normal
+# area but absurdly long perimeters (e.g. region boundaries).
+MAX_TRACK_LENGTH_M = 5000.0
+
 
 # ---------------------------------------------------------------------------
 # Data classes
@@ -167,9 +176,9 @@ def find_track_contours(
         outer = contours[track_outer_idx]
         area = areas[track_outer_idx]
 
-        # Skip noise and legend-region contours
+        # Skip noise, oversized region groups, and legend-region contours
         cx, cy = _contour_centroid(outer)
-        if area < MIN_CONTOUR_AREA_PX or cy > legend_y_cutoff:
+        if area < MIN_CONTOUR_AREA_PX or area > MAX_CONTOUR_AREA_PX or cy > legend_y_cutoff:
             track_outer_idx = hierarchy[track_outer_idx][0]  # next sibling
             continue
 
@@ -507,10 +516,11 @@ def match_contours_to_names(
 ) -> list[MatchedTrack]:
     """Match extracted contours to track names using multiple signals.
 
-    Signals (in priority order):
-      1. **Label proximity**: nearest OCR label to contour centroid
-      2. **Length matching**: compare contour length (in meters) to legend lengths
-      3. **Shape matching**: compare against existing OSM/SVG tracks
+    Three-pass approach:
+      Pass 1 — Score each contour against labels, legend lengths, and shapes.
+      Pass 2 — Deduplicate: when multiple contours claim the same name, keep
+               only the highest-confidence one and clear the rest.
+      Pass 3 — Fallback: assign "poster-track-NN" to remaining unnamed contours.
 
     Args:
         contours: Extracted track contours.
@@ -530,6 +540,9 @@ def match_contours_to_names(
     results: list[MatchedTrack] = []
     used_legend: set[int] = set()
 
+    # ------------------------------------------------------------------
+    # Pass 1 — Score each contour
+    # ------------------------------------------------------------------
     for tc, cl in zip(contours, centerlines):
         length_px = length(cl)
         length_m = length_px * meters_per_pixel
@@ -547,6 +560,13 @@ def match_contours_to_names(
             mt.location = "Nurburg, Germany"
             mt.confidence = 1.0
             mt.match_source = "universe"
+            results.append(mt)
+            continue
+
+        # Length guard: skip contours with implausibly long perimeters
+        if length_m > MAX_TRACK_LENGTH_M:
+            mt.name = ""
+            mt.match_source = "skipped"
             results.append(mt)
             continue
 
@@ -591,7 +611,11 @@ def match_contours_to_names(
                     continue
                 sim = shape_similarity(cl, ref_cl)
                 if sim["is_similar"]:
-                    shape_conf = sim["coverage"] * (1.0 - sim["hausdorff"])
+                    shape_conf = (
+                        sim["coverage"]
+                        * (1.0 - sim["hausdorff"])
+                        * (1.0 - sim["aspect_ratio_diff"])
+                    )
                     if shape_conf > best_confidence:
                         best_name = track_id
                         best_confidence = shape_conf
@@ -610,6 +634,39 @@ def match_contours_to_names(
                     break
 
         results.append(mt)
+
+    # ------------------------------------------------------------------
+    # Pass 2 — Deduplicate: keep only the highest-confidence match per name
+    # ------------------------------------------------------------------
+    name_best: dict[str, tuple[int, float]] = {}  # name -> (index, confidence)
+    for i, mt in enumerate(results):
+        if not mt.name or mt.contour.is_universe:
+            continue
+        prev = name_best.get(mt.name)
+        if prev is None or mt.confidence > prev[1]:
+            name_best[mt.name] = (i, mt.confidence)
+
+    for i, mt in enumerate(results):
+        if not mt.name or mt.contour.is_universe:
+            continue
+        winner_idx, _ = name_best[mt.name]
+        if i != winner_idx:
+            mt.name = ""
+            mt.confidence = 0.0
+            mt.match_source = ""
+
+    # ------------------------------------------------------------------
+    # Pass 3 — Fallback naming for unnamed non-universe contours
+    # ------------------------------------------------------------------
+    fallback_num = 0
+    for mt in results:
+        if mt.contour.is_universe:
+            continue
+        if not mt.name:
+            fallback_num += 1
+            mt.name = f"poster-track-{fallback_num:02d}"
+            mt.confidence = 0.0
+            mt.match_source = "fallback"
 
     return results
 
@@ -734,6 +791,14 @@ def matched_to_canonical(
         (x * meters_per_pixel, y * meters_per_pixel)
         for x, y in mt.centerline
     ]
+
+    # Normalize coordinates: translate to origin and flip Y (image Y goes
+    # down, standard cartesian Y goes up)
+    if scaled:
+        min_x = min(p[0] for p in scaled)
+        min_y = min(p[1] for p in scaled)
+        max_y = max(p[1] for p in scaled)
+        scaled = [(x - min_x, max_y - y) for x, y in scaled]
 
     # Smooth pixel-level jaggedness from contour detection
     scaled = smooth(scaled, iterations=3)

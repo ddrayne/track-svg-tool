@@ -86,5 +86,5 @@ def shape_similarity(
         "hausdorff": best_hausdorff,
         "coverage": best_coverage,
         "aspect_ratio_diff": ar_diff,
-        "is_similar": best_hausdorff < 0.35 and ar_diff < 0.5 and best_coverage > 0.80,
+        "is_similar": best_hausdorff < 0.25 and ar_diff < 0.35 and best_coverage > 0.85,
     }

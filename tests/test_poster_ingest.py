@@ -15,12 +15,17 @@ import numpy as np
 import pytest
 
 from trackfactory.ingest.poster_raster import (
+    MAX_CONTOUR_AREA_PX,
+    MAX_TRACK_LENGTH_M,
     NURBURGRING_LENGTH_M,
+    MatchedTrack,
     TrackContour,
     calibrate_scale,
     extract_centerline,
     find_track_contours,
     load_and_threshold,
+    match_contours_to_names,
+    matched_to_canonical,
 )
 
 POSTER_PATH = Path(__file__).resolve().parents[1] / "racetracks-of-the-world-to-scale-01.jpg"
@@ -203,3 +208,112 @@ def test_legend_ocr_finds_entries():
     image = cv2.imread(str(POSTER_PATH))
     entries = ocr_legend(image)
     assert len(entries) >= 20, f"Expected >=20 legend entries, found {len(entries)}"
+
+
+# ---------------------------------------------------------------------------
+# Tests for spurious contour filtering, dedup, fallback, normalization
+# ---------------------------------------------------------------------------
+
+
+def test_spurious_contours_filtered():
+    """Oversized blobs inside the universe are filtered by MAX_CONTOUR_AREA_PX."""
+    binary = np.zeros((800, 800), dtype=np.uint8)
+
+    # Universe: large outer ring
+    cv2.circle(binary, (400, 400), 350, 255, thickness=15)
+
+    # Normal track: small ring inside universe
+    cv2.circle(binary, (300, 300), 40, 255, thickness=6)
+
+    # Oversized blob: filled region that exceeds MAX_CONTOUR_AREA_PX
+    cv2.circle(binary, (500, 400), 200, 255, thickness=-1)  # filled, area ~125K px
+
+    contours = find_track_contours(binary)
+
+    # Universe should be found
+    universes = [tc for tc in contours if tc.is_universe]
+    assert len(universes) == 1
+
+    # Non-universe contours should NOT include the oversized blob
+    non_universe = [tc for tc in contours if not tc.is_universe]
+    for tc in non_universe:
+        assert tc.area <= MAX_CONTOUR_AREA_PX, (
+            f"Oversized contour (area={tc.area:.0f}) was not filtered"
+        )
+
+
+def test_name_deduplication():
+    """When two contours match the same name, only the higher-confidence one keeps it."""
+    # Create two simple track contours
+    outer1 = _make_circle_contour(200, 200, 50, n=100)
+    outer2 = _make_circle_contour(400, 400, 60, n=100)
+
+    tc1 = TrackContour(outer=outer1, inner=None, centroid=(200, 200), area=7854)
+    tc2 = TrackContour(outer=outer2, inner=None, centroid=(400, 400), area=11310)
+
+    cl1 = [(float(p[0][0]), float(p[0][1])) for p in outer1]
+    cl2 = [(float(p[0][0]), float(p[0][1])) for p in outer2]
+
+    # Both will shape-match the same reference (a circle at same scale)
+    ref_circle = [(200 + 55 * math.cos(a), 200 + 55 * math.sin(a))
+                  for a in [i * 2 * math.pi / 100 for i in range(100)]]
+
+    existing = {"test-circuit": ref_circle}
+
+    results = match_contours_to_names(
+        [tc1, tc2], [cl1, cl2],
+        meters_per_pixel=1.0,
+        existing_tracks=existing,
+    )
+
+    # At most one contour should have the name "test-circuit"
+    named = [mt for mt in results if mt.name == "test-circuit"]
+    assert len(named) <= 1, f"Duplicate name: {len(named)} contours claimed 'test-circuit'"
+
+
+def test_fallback_naming():
+    """Contours with no matching signals get 'poster-track-NN' fallback names."""
+    outer = _make_circle_contour(200, 200, 50, n=100)
+    tc = TrackContour(outer=outer, inner=None, centroid=(200, 200), area=7854)
+    cl = [(float(p[0][0]), float(p[0][1])) for p in outer]
+
+    # No labels, no legend, no existing tracks
+    results = match_contours_to_names(
+        [tc], [cl],
+        meters_per_pixel=1.0,
+    )
+
+    assert len(results) == 1
+    mt = results[0]
+    assert mt.name.startswith("poster-track-"), f"Expected fallback name, got '{mt.name}'"
+    assert mt.match_source == "fallback"
+    assert mt.confidence == 0.0
+
+
+def test_coordinate_normalization():
+    """matched_to_canonical translates coords to origin and flips Y."""
+    outer = _make_circle_contour(500, 600, 40, n=100)
+    tc = TrackContour(outer=outer, inner=None, centroid=(500, 600), area=5027)
+    cl = [(float(p[0][0]), float(p[0][1])) for p in outer]
+
+    mt = MatchedTrack(
+        contour=tc,
+        centerline=cl,
+        length_px=251.0,
+        length_m=251.0,
+        name="test-track",
+        confidence=0.5,
+        match_source="shape",
+    )
+
+    canonical = matched_to_canonical(mt, meters_per_pixel=1.0, image_path="test.jpg")
+
+    xs = [p[0] for p in canonical.centerline]
+    ys = [p[1] for p in canonical.centerline]
+
+    # Minimum x and y should be near 0 (translated to origin)
+    assert min(xs) >= -1.0, f"min x = {min(xs):.1f}, expected near 0"
+    assert min(ys) >= -1.0, f"min y = {min(ys):.1f}, expected near 0"
+
+    # Y should be flipped — originally centered at y=600, now should be near 0..~80
+    assert max(ys) < 200, f"max y = {max(ys):.1f}, expected Y-flipped range"
